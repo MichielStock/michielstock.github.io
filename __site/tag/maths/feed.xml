@@ -1,0 +1,57 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title><![CDATA[Maximum Entropy]]></title>
+  <description><![CDATA[A blog about books, computation and biology
+]]></description>
+  <link>https://michielstock.github.io/</link>
+  <atom:link href="https://michielstock.github.io/tag/maths/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title><![CDATA[On the Apocalypse, programming languages and quantum suicide]]></title>
+    <link>https://michielstock.github.io/posts/2019/2019-09-02-doomsday/</link>
+    <description><![CDATA[Summary of the Doomsday Argument.
+<br><a href="https://michielstock.github.io/posts/2019/2019-09-02-doomsday/">Read more</a>]]></description>
+    <guid>https://michielstock.github.io/posts/2019/2019-09-02-doomsday/</guid>
+    <pubDate>Mon, 2 Sep 2019 00:00:00 UT</pubDate>
+  </item>
+  <item>
+    <title><![CDATA[Uncertainty propagation and high-dimensional indexing in Julia]]></title>
+    <link>https://michielstock.github.io/posts/2019/2019-06-13-julia/</link>
+    <description><![CDATA[Some cool examples of Julia&#39;s type system and higher-order matrices&#33;
+<br><a href="https://michielstock.github.io/posts/2019/2019-06-13-julia/">Read more</a>]]></description>
+    <guid>https://michielstock.github.io/posts/2019/2019-06-13-julia/</guid>
+    <pubDate>Thu, 13 Jun 2019 00:00:00 UT</pubDate>
+  </item>
+  <item>
+    <title><![CDATA[On recovering matrices]]></title>
+    <link>https://michielstock.github.io/posts/2019/2019-04-16-nuclear/</link>
+    <description><![CDATA[Some thoughts about matrix recovery with matrix regularization.
+<br><a href="https://michielstock.github.io/posts/2019/2019-04-16-nuclear/">Read more</a>]]></description>
+    <guid>https://michielstock.github.io/posts/2019/2019-04-16-nuclear/</guid>
+    <pubDate>Tue, 16 Apr 2019 00:00:00 UT</pubDate>
+  </item>
+  <item>
+    <title><![CDATA[Climbing the ladder of causality]]></title>
+    <link>https://michielstock.github.io/posts/2018/2018-06-24-causality/</link>
+    <description><![CDATA[An accessible intro to causality based on the Book of Why.
+<br><a href="https://michielstock.github.io/posts/2018/2018-06-24-causality/">Read more</a>]]></description>
+    <guid>https://michielstock.github.io/posts/2018/2018-06-24-causality/</guid>
+    <pubDate>Sun, 24 Jun 2018 00:00:00 UT</pubDate>
+  </item>
+  <item>
+    <title><![CDATA[Lessons from convex optimization]]></title>
+    <link>https://michielstock.github.io/posts/2018/2018-03-07-ConvexSummary/</link>
+    <description><![CDATA[How to convex optimize.
+<br><a href="https://michielstock.github.io/posts/2018/2018-03-07-ConvexSummary/">Read more</a>]]></description>
+    <guid>https://michielstock.github.io/posts/2018/2018-03-07-ConvexSummary/</guid>
+    <pubDate>Wed, 7 Mar 2018 00:00:00 UT</pubDate>
+  </item>
+  <item>
+    <title><![CDATA[Notes on Optimal Transport]]></title>
+    <link>https://michielstock.github.io/posts/2017/2017-11-5-OptimalTransport/</link>
+    <description><![CDATA[Accessible intro to optimal transportation theory, with applications in machine learning and image processing.
+<br><a href="https://michielstock.github.io/posts/2017/2017-11-5-OptimalTransport/">Read more</a>]]></description>
+    <guid>https://michielstock.github.io/posts/2017/2017-11-5-OptimalTransport/</guid>
+    <pubDate>Sun, 5 Nov 2017 00:00:00 UT</pubDate>
+  </item>
+</channel>
+</rss>

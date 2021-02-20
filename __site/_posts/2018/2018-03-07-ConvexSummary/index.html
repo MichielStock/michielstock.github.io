@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+     <link rel="stylesheet" href="/libs/katex/katex.min.css">
+     
+    
+    <link rel="stylesheet" href="/css/franklin.css">
+<link rel="stylesheet" href="/css/tufte.css">
+<link rel="stylesheet" href="/css/latex.css">
+<link rel="stylesheet" href="/css/adjust.css"> <!-- sheet to overwrite some clashing styles -->
+<link rel="icon" href="/assets/favicon.png">
+
+     <title>Convex functions</title>  
+</head>
+
+<body>
+<div id="layout">
+  <div id="menu">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/CV/">CV</a></li>
+      <li><a href="/research/">Research</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/tags/">Tags</a></li>
+    </ul>
+  </div>
+  <div id="main">
+
+
+
+<!-- Content appended here -->
+<div class="franklin-content"><p><hr /> layout: post title: Lessons from convex optimization –-</p>
+<p>In the last four weeks, I taught about convex optimization to my bioinformatics students. Since this topic is of general interest to those working with data and models, I will try to summarize the main points that the &#39;casual optimizer&#39; should know. For a much more comprehensive overview, I refer to the excellent textbook of Boyd and Vandenberghe referenced below.</p>
+<h2 id="convex_functions"><a href="#convex_functions">Convex functions</a></h2>
+<p>A <em>convex set</em> </p>
+\[\mathcal{C}\]
+<p>is a set for which every element on a line segment connecting two points </p>
+\[\mathbf{x},\mathbf{x}'\in\mathcal{C}\]
+<p>is also in this set.</p>
+<p>A <em>convect function</em> </p>
+\[f\]
+<p>is a function for which the input domain is convex and for which it holds that</p>
+\[
+f(\theta\mathbf{x}+(1-\theta)\mathbf{x}')\leq \theta f(\mathbf{x})+(1-\theta)f(\mathbf{x}')\quad \forall \theta\in[0,1]\,,
+\]
+<p>meaning that any line segment connecting two points on this curve lies above the curve.</p>
+<p><img src="../../images/2018_convex/convex_function_illustration.png" alt="A convex function." /></p>
+<p>If the function is differentiable it also holds that the first-order Taylor approximation lies below the curve:</p>
+\[
+f(\mathbf{x})\geq f(\mathbf{x}')+\nabla f(\mathbf{x}')^\top(\mathbf{x}-\mathbf{x}')\,.
+\]
+<p>Convex functions are nice because when it has a minimum, this minimum is a global minimum. Such functions frequently arise in statistics and machine learning. Many machine learning methods, such as the support vector machine, are specifically posed as convex optimization problems.</p>
+<h2 id="quadratic_function"><a href="#quadratic_function">Quadratic function</a></h2>
+<p>An important special case of convex functions are <em>quadratic minimization problems</em>:</p>
+\[
+\min_\mathbf{x}\,\frac{1}{2}\mathbf{x}^\top P \mathbf{x} + \mathbf{q}^\top\mathbf{x} + r\,,
+\]
+<p>with </p>
+\[P\]
+<p>symmetric and positive-definite &#40;i.e. all eigenvectors are greater than zero&#41;.</p>
+<p>These have a closed-form solution:</p>
+\[
+\mathbf{x}^\star = -P^{-1}\mathbf{q}\,.
+\]
+<p>Quadratic systems are important for least-squares-based learning and in certain graph problems. From a theoretical point of view, they are important because convex problems can be closely approximated by quadratic functions near their minimum, the region we are interested in&#33;</p>
+<h2 id="general_descent_algorithms"><a href="#general_descent_algorithms">General descent algorithms</a></h2>
+<p>For general convex optimization problems, one usually uses <em>descent algorithms</em>. The pseudocode of the general algorithm is given below.</p>
+<blockquote>
+<p><strong>given</strong> a starting point </p>
+</blockquote>
+\[\mathbf{x}\]
+<blockquote>
+<p><strong>repeat</strong></p>
+<blockquote>
+<ol>
+<li><p>Determine descent direction </p>
+</li>
+</ol>
+</blockquote>
+</blockquote>
+\[\Delta \mathbf{x}\]
+<blockquote>
+<blockquote>
+<ol start="2">
+<li><p><em>Line search</em>. Choose </p>
+</li>
+</ol>
+</blockquote>
+</blockquote>
+\[t>0\]
+<p>.</p>
+<blockquote>
+<blockquote>
+<ol start="3">
+<li><p><em>Update</em>. </p>
+</li>
+</ol>
+</blockquote>
+</blockquote>
+\[\mathbf{x}:=\mathbf{x} + t \Delta \mathbf{x}\]
+<p>.</p>
+<blockquote>
+<p><strong>until</strong> stopping criterion is reached.</p>
+<p><strong>Output</strong>: </p>
+</blockquote>
+\[\mathbf{x}\]
+<p>Descent algorithms differ by their <em>descent direction</em>, method for choosing the <em>step size</em> and the <em>convergence criterion</em>  &#40;often based on the norm of the gradient&#41;.</p>
+<p>Proper descent methods have that</p>
+\[
+(\Delta \mathbf{x})^\top \nabla f(\mathbf{x})\leq 0\,.
+\]
+<p><img src="../../images/2018_convex/descent_step.png" alt="Descent and ascent step." /></p>
+<h2 id="gradient_descent"><a href="#gradient_descent">Gradient descent</a></h2>
+<p>A straightforward choice for the step size is the negative gradient:</p>
+\[
+\Delta \mathbf{x} = -\nabla f(\mathbf{x})\,.
+\]
+<p>Though this seems to make sense, in practice the convergence is rather poor. If </p>
+\[f\]
+<p>is strongly convex &#40;constants </p>
+\[m\]
+<p>and </p>
+\[M\]
+<p>exist such that </p>
+\[mI\prec \nabla^2 f(\mathbf{x})\prec MI\]
+<p>&#41;, it holds that </p>
+\[f(\mathbf{x}^{(k)}) - p^*\leq \varepsilon\]
+<p>after at most</p>
+\[
+\frac{\log((f(\mathbf{x}^{(0)}) - p^*)/\varepsilon)}{\log(1/c)}
+\]
+<p>iterations, where </p>
+\[c =1-\frac{m}{M}<1\]
+<p>.</p>
+<p>We conclude:</p>
+<ul>
+<li><p>The number of steps needed for a given quality is proportional to the logarithm of the initial error.</p>
+</li>
+<li><p>To increase the accuracy with an order of magnitude, only a few more steps are needed.</p>
+</li>
+<li><p>Convergence is again determined by the <em>condition number</em> </p>
+</li>
+</ul>
+\[M/m\]
+<p>. Note that for large condition numbers: </p>
+\[\log(1/c)=-\log(1-\frac{m}{M})\approx m/M\]
+<p>, so the number of required iterations increases linearly with increasing </p>
+\[M/m\]
+<p>.</p>
+<p>So the convergence is mainly determined by the shape of the function. See below for the example of the convergence on a quadratic and non-quadratic function.</p>
+<p><img src="../../images/2018_convex/gradient_descent.png" alt="Path of gradient descent on the quadratic and non-quadratic functions." /> <img src="../../images/2018_convex/convergence_gd.png" alt="Convergence of gradient descent on the quadratic and non-quadratic functions." /></p>
+<p>Note that even for such simple two-dimensional problems, pure gradient descent takes a long time to converge.</p>
+<h2 id="newtons_method"><a href="#newtons_method">Newton&#39;s method</a></h2>
+<p>The main idea of <strong>Newton&#39;s method</strong> is approximating a function with a second-order Taylor approximation </p>
+\[\hat{f}\]
+<p>of </p>
+\[f\]
+<p>at </p>
+\[\mathbf{x}\]
+<p>:</p>
+\[
+f(\mathbf{x}+\mathbf{v})\approx\hat{f}(\mathbf{x}+\mathbf{v}) = f(\mathbf{x}) + \nabla f(\mathbf{x})^\top \mathbf{v} + \frac{1}{2} \mathbf{v}^\top \nabla^2 f(\mathbf{x}) \mathbf{v}\,
+\]
+<p>which is a convex quadratic function of </p>
+\[\mathbf{v}\]
+<p>. The <em>Newton step</em> is the step that minimizes this approximation in </p>
+\[\mathbf{v}\]
+<p>. The step is hence given by</p>
+\[
+\Delta \mathbf{x} = -(\nabla^2 f(\mathbf{x}))\nabla f(\mathbf{x})\,.
+\]
+<p>Using the newton step in the general descent algorithm generally leads to a very fast convergence, especially when close to the minimum. Newton&#39;s method is much more robust to bad condition numbers and is <em>affine invariant</em>, scaling, translating or rotating the input domain does not influence its performance.</p>
+<h2 id="linear_equality_constraints"><a href="#linear_equality_constraints">Linear equality constraints</a></h2>
+<p>Sometimes we want to minimize a function with respect to a <em>linear equality constraint</em>:</p>
+\[
+\min_\mathbf{x} f(\mathbf{x})
+\]
+\[
+\text{subject to } A\mathbf{x}=\mathbf{b}
+\]
+<p>where </p>
+\[f : \mathbb{R}^n \rightarrow \mathbb{R}\]
+<p>is convex and twice continuously differentiable and </p>
+\[A\in \mathbb{R}^{p\times n}\]
+<p>with a rank </p>
+\[p < n\]
+<p>.</p>
+<p>A special Newton step which respects these constraints can be obtained by solving the following system:</p>
+\[
+\begin{bmatrix}
+ \nabla^2 f(\mathbf{x})&  A^\top \\
+A & 0 \\
+     \end{bmatrix}
+     \begin{bmatrix}
+\Delta \mathbf{x}_\text{nt}\\
+\mathbf{w}
+     \end{bmatrix}
+     =
+     -\begin{bmatrix}
+\nabla f(\mathbf{x}) \\
+A\mathbf{x}-\mathbf{b}
+     \end{bmatrix}\,.
+\]
+<p>Note that:</p>
+<ul>
+<li><p>If the starting point </p>
+</li>
+</ul>
+\[\mathbf{x}^{(0)}\]
+<p>is chosen such that </p>
+\[A\mathbf{x}^{(0)}=\mathbf{b}\]
+<p>, the residual term vanishes and steps will remain in the feasible region. This is the <strong>feasible start Newton method</strong>.</p>
+<ul>
+<li><p>If we choose an arbitrary </p>
+</li>
+</ul>
+\[\mathbf{x}^{(0)}\in\]
+<p><strong>dom</strong> </p>
+\[f\]
+<p>, not satisfying the constraints, this is the <strong>infeasible start Newton method</strong>. It will usually converge rapidly to the feasible region &#40;check the final solution&#33;&#41;.</p>
+<h2 id="inequality_constraints"><a href="#inequality_constraints">Inequality constraints</a></h2>
+<p>Dealing with inequality constrains is more complex. In general, we want to solve</p>
+\[
+\min_\mathbf{x}  f_0(\mathbf{x})
+\]
+\[
+\text{subject to } f_i(\mathbf{x}) \leq 0, \quad i=1,\ldots,m
+\]
+<p>where </p>
+\[f_0,\ldots,f_m\ :\ \mathbb{R}^n \rightarrow \mathbb{R}\]
+<p>are convex and twice continuously differentiable.</p>
+<p>A trick is reformulating the problem using soft constraints in the objective function:</p>
+\[
+\min_\mathbf{x}  tf_0(\mathbf{x})-\sum_{i=1}^m\log(-f_i(\mathbf{x}))\,,
+\]
+<p>where we used the <em>logarithmic barrier</em> to approximate the inequality constraints. The parameter </p>
+\[t\]
+<p>determines the sharpness of the approximation, as illustrated below.</p>
+<p>&#33;&#91;Larger values of </p>
+\[t\]
+<p>result in a better approximation of&#93;&#40;../../images/2018<em>convex/log</em>bar.png&#41;</p>
+<p>High values of </p>
+\[t\]
+<p>result in a very good approximation but are hard to optimize because they are ill-conditioned. <em>Interior point methods</em> start with a low value of </p>
+\[t\]
+<p>to obtain an initial solution and iteratively use the previous solution as a starting point for the soft-constrained optimization problem with increased </p>
+\[t\]
+<p>.</p>
+<h2 id="references"><a href="#references">References</a></h2>
+<ul>
+<li><p>Boyd, S. and Vandenberghe, L., &#39;<em><a href="https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf">Convex Optimization</a></em>&#39;. Cambridge University Press &#40;2004&#41;</p>
+</li>
+<li><p>Bishop, C., <em>Pattern Recognition and Machine Learning</em>. Springer &#40;2006&#41;</p>
+</li>
+</ul>
+<div class="page-foot">
+  <div class="copyright">
+    &copy; Michiel Stock. Last modified: July 11, 2018. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+  </div>
+</div>
+</div><!-- CONTENT ENDS HERE -->
+        </div> <!-- end of id=main -->
+    </div> <!-- end of id=layout -->
+    
+        <script src="/libs/katex/katex.min.js"></script>
+<script src="/libs/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.body)</script>
+
+    
+    
+  </body>
+</html>

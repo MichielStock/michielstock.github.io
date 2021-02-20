@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+     <link rel="stylesheet" href="/libs/highlight/github.min.css">
+   
+    <link rel="stylesheet" href="/css/franklin.css">
+<link rel="stylesheet" href="/css/tufte.css">
+<link rel="stylesheet" href="/css/latex.css">
+<link rel="stylesheet" href="/css/adjust.css"> <!-- sheet to overwrite some clashing styles -->
+<link rel="icon" href="/assets/favicon.png">
+
+     <title>Julia for teaching optimization</title>  
+</head>
+
+<script type="application/javascript">
+	var doNotTrack = false;
+	if (!doNotTrack) {
+		window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+		ga('create', 'UA-110926897-1', 'auto');
+		ga('send', 'pageview');
+	}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+<body>
+<div id="layout">
+  <div id="menu">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/CV/">CV</a></li>
+      <li><a href="/research/">Research</a></li>
+      <li><a href="/blog/">Blog</a></li>
+    </ul>
+  </div>
+  <div id="main">
+
+
+
+<!-- Content appended here -->
+<div class="franklin-content">
+<h1 id="julia_for_teaching_optimization"><a href="#julia_for_teaching_optimization">Julia for teaching optimization</a></h1>
+<p>Last year, I taught my optimization course for the fourth time. The first year I was the TA and involved in designing the course, before becoming the lecturer giving both theory lectures and the exercises. Having fought tooth and nail to be able to use Python &#40;as opposed to Matlab&#41;, I switched to Julia in the last year. Time for some reflection in using this language for my course.</p>
+<h2 id="background"><a href="#background">Background</a></h2>
+<p>Some background of the course. It is called &#39;Selected Topics in Mathematical Optimization&#39; &#40;STMO&#41; and is taught in our Master in Bioinformatics program to introduce them to various methods in optimization. Most of the students have no computer science background. Students entering from the BioScience engineering track had mathematics courses involving numerically solving differential equations and implementing sampling algorithms in Matlab. Most students arriving from Biochemistry had less mathematics and programming in their bachelor. All students in the master have several programming and algorithms courses, in addition to general courses in machine learning, statistics, etc., which use Python and R.</p>
+<p>The goal of STMO is twofold. Firstly, students should get an overview of the different optimization problems and see how these can be applied to computational biology. We see convex optimization, optimal transportation, graph problems &#40;minimal spanning tree, shortest paths, etc.&#41;, NP-complete problems &#40;TSP, knapsack, etc.&#41; and metaheuristics &#40;simulated annealing, evolutionary algorithms, CMA-ES, Bayesian optimization, etc.&#41;. The secondary goal is to learn how to implement such optimization algorithms and tailor them towards particular problems. Many computational biology problems require solutions that are not off-the-shelf, so students should learn to make their implementation, if only for educational reasons. STMO tries to be a stealth introduction to scientific computing.</p>
+<p>Since a large part of the course deals with implementations and driven by my interest in the Julia language, I wanted to switch to the language. I was especially impressed by the recent book <a href="https://mitpress.mit.edu/books/algorithms-optimization"><em>Algorithms for Optimization</em></a> in which each algorithm is supported by Julia code. After attending Juliacon last year &#40;and saw the talk of one of the authors&#41;, I decided to take the leap.</p>
+<p>A typical lecture involves an hour of theory followed by an hour of implementing the covered algorithms in a Jupyter notebook. For your information, the repo for the exercises can be found <a href="https://github.com/MichielStock/SelectedTopicsOptimization">here</a> for the old Python version and <a href="https://github.com/MichielStock/STMO">here</a> for the new edition in Julia.</p>
+<h2 id="strengths_of_julia"><a href="#strengths_of_julia">Strengths of Julia</a></h2>
+<p>One of the most important benefits of teaching using Julia is the syntax, which is supremely suited for mathematics. Using Unicode symbols may not be entirely good programming practice; it makes it easy to translate equations to code. Simple one-line functions such as <code>f&#40;x&#41; &#61; 2x^2 &#43; 3x &#43; 4</code> are also a joy to work with. The <code>LinearAlgebra</code> library is also, IMO, much cleaner than Numpy. I spent less time explaining the quirks of the language compare and more explaining the math. Compare a typical piece of code, in Python and Julia.</p>
+<p><strong>Python</strong>:</p>
+<pre><code class="python hljs"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">gradient_descent</span>(<span class="hljs-params">P, q, x0, alpha=<span class="hljs-number">0.1</span>,
+                maxiter=<span class="hljs-number">1000</span>, epsilon=<span class="hljs-number">1e-5</span></span>):</span>
+    x = np.copy(x0)
+    grad_x = P.dot(x) + q
+    <span class="hljs-built_in">iter</span> = <span class="hljs-number">0</span>
+    <span class="hljs-keyword">while</span> np.linalg.norm(grad_x) &gt; epsilon <span class="hljs-keyword">or</span>\
+               <span class="hljs-built_in">iter</span> &lt;= maxiter:
+        <span class="hljs-built_in">iter</span> += <span class="hljs-number">1</span>
+        x -= alpha * grad_x
+        grad_x[:] = P.dot(x) + q
+    <span class="hljs-keyword">return</span> x
+
+P = np.array([[<span class="hljs-number">10</span>, -<span class="hljs-number">1</span>],
+              [-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>]])
+q = np.array([[<span class="hljs-number">0</span>], [-<span class="hljs-number">10</span>]])
+x0 = np.zeros((<span class="hljs-number">2</span>, <span class="hljs-number">1</span>))
+
+gradient_descent(P, q, x0)</code></pre>
+<p><strong>Julia</strong>:</p>
+<pre><code class="julia hljs"><span class="hljs-keyword">using</span> LinearAlgebra
+
+<span class="hljs-keyword">function</span> gradient_descent(P, q, x₀; α=<span class="hljs-number">0.1</span>,
+                maxiter=<span class="hljs-number">1000</span>, ϵ=<span class="hljs-number">1e-5</span>)
+    x = copy(x₀)
+    ∇f = x -&gt; P * x + q
+    Δx = -∇f(x)
+    iter = <span class="hljs-number">0</span>
+    <span class="hljs-keyword">while</span> norm(Δx) &gt; ϵ || iter ≤ maxiter
+        iter += <span class="hljs-number">1</span>
+        x .+= α * Δx
+        Δx .= - ∇f(x)
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> x
+<span class="hljs-keyword">end</span>
+
+P = [<span class="hljs-number">10.0</span> -<span class="hljs-number">1.0</span>;
+    -<span class="hljs-number">1.0</span> <span class="hljs-number">1.0</span>];
+q = [<span class="hljs-number">0</span>; -<span class="hljs-number">10.0</span>];
+x₀ = zeros(<span class="hljs-number">2</span>);</code></pre>
+<p>I find the latter to be much more readable.</p>
+<p>Of course, a great benefit of Julia is the speed. Since it is a course for bioinformaticians, students are expected to work with large datasets. Since most of them &#40;including myself&#41; mainly work with high-level programming languages, Julia is an excellent alternative to C to get good performances. Most students don&#39;t write truly performant code during the course, but I am confident that they can generate it when the situation arises.</p>
+<p>Finally, a strength I enjoyed as a teacher was the ease of developing and distributing the code. It was quite easy to create a small package containing example functions, plotting functions and other utilities. I could add unit tests to make sure everything works. The package manager made it a breeze for the students to install this. This made it also easy to make use of the ecosystem of Julia packages, from automatic differentiation, to Colors, to off-the-shelf optimization packages such as JuMP and Optim.</p>
+<h2 id="weaknesses_of_julia"><a href="#weaknesses_of_julia">Weaknesses of Julia</a></h2>
+<p>The most common issue students reported in the feedback form is the lack of sufficient documentation. The Julia community seems to be more active on its <a href="https://julialang.slack.com/">Slack</a> and <a href="https://discourse.julialang.org/">Discourse</a> channels, rather than, say, Stack Overflow. I noted that students don&#39;t always know where to look. Of course, there are magnitudes more examples and solutions available for Python problems than for Julia, so this will remain a bottleneck. Due to the pandemic, I also was not possible to help with the more obvious issues, so this should also be taken into account.</p>
+<p>Another irritation was the long waiting times. I could tout Julia&#39;s speed all day long, but from the students&#39; point of view, there were long waiting times to get started. The Time To The First Plot is a well-known annoyance. Because I was updating and tweaking the course repo before every class, students had to update the STMO package and needed to wait before it was recompiled. Since most of the exercises were didactic toy examples, the difference in running time between Python &#40;e.g., milliseconds&#41; and Julia &#40;e.g., microseconds&#41; are often unnoticeable. The projects were more computationally demanding, so there were luckily moments when the language could shine.</p>
+<h2 id="opportunities_for_julia"><a href="#opportunities_for_julia">Opportunities for Julia</a></h2>
+<p>I tried to avoid going too deep into the type system as this is already an advanced concept. However, I can see great potential in using the type system and dispatch for creating an ontology of the algorithms and problems. We could define <code>DescentMethod</code> as an abstract type with, for example, <code>GradientDescent</code> as a concrete type. One thing I tried is giving &#39;computational definitions&#39; for certain concepts, in contrast to mathematical ones. For example, graphs are defined as:</p>
+<pre><code class="julia hljs">EdgeList{T} = <span class="hljs-built_in">Array</span>{<span class="hljs-built_in">Tuple</span>{T,T},<span class="hljs-number">1</span>}
+WeightedEdgeList{R,T} = <span class="hljs-built_in">Array</span>{<span class="hljs-built_in">Tuple</span>{R,T,T},<span class="hljs-number">1</span>}
+Vertices{T} = <span class="hljs-built_in">Array</span>{T,<span class="hljs-number">1</span>}
+AdjList{R,T} = <span class="hljs-built_in">Dict</span>{T,<span class="hljs-built_in">Array</span>{<span class="hljs-built_in">Tuple</span>{R,T},<span class="hljs-number">1</span>}}</code></pre>
+<p>which the different representations precisely&#33;</p>
+<p>Another thing I want to explore further is macros. Last year, I did not feel confident enough to rely on them. They seem to be promising to add to the functionality to, for example, track convergence of optimization algorithms. I should also make more use of the <code>PlotRecipes</code> library to create custom plotting functions. Intuitively, students seem to follow the idea of metaprogramming, so I would be nice to explore this more.</p>
+<p>Finally, Julia can be used to explore the low-level details of code execution, up to the <a href="https://biojulia.net/post/hardware/">hardware level</a>. We could elaborate somewhat on this, including how to run specific optimization algorithms on GPU.</p>
+<h2 id="threats_for_julia"><a href="#threats_for_julia">Threats for Julia</a></h2>
+<p>In the context of teaching, a justified remark would be if it is advisable to learn a new language for a single course. One can undoubtedly motivate the language for numerical computing, but its future position in other domains remains uncertain. Will it grow in machine learning? Julia has potential for <a href="https://biojulia.net/post/seq-lang/">bioinformatics applications</a> but will it gain prominence there? Will Julia grow beyond academia? And can we not do all this stuff in Python using Numba/Pytorch/JAX &#40;for the record, I don&#39;t think so&#41;? Known issues such as the language not being perceived as stable or many packages with a low <a href="https://en.wikipedia.org/wiki/Bus_factor">bus factor</a> might also demotivate.</p>
+<h2 id="conclusions"><a href="#conclusions">Conclusions</a></h2>
+<p>All in all, I am happy with the transition to Julia for my course. I found it smoother than expected, but this might also because I am a bit more experienced than when I made the course material in Python. The language is well-suited to teach mathematics and lends itself well for diving deeper in real-world applications. Students found the language an added value, though it was not always evident to become proficient at it.</p>
+<div class="page-foot">
+  <div class="copyright">
+    &copy; Michiel Stock. Last modified: February 20, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+  </div>
+</div>
+</div><!-- CONTENT ENDS HERE -->
+        </div> <!-- end of id=main -->
+    </div> <!-- end of id=layout -->
+    
+    
+        
+
+
+    
+  </body>
+</html>
