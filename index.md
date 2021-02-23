@@ -25,6 +25,6 @@ In my spare time, I enjoy reading, running, and boardgames. I am also folling tr
 </body>
 ~~~
 
-[📧](michielfmstock@gmail.com) mail
+[📧](mailto:michielfmstock@gmail.com) mail
 
 [📚](https://www.goodreads.com/user/show/4249244-michiel) books

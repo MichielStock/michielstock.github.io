@@ -87,4 +87,4 @@ So, if one task takes twice as much time as another, only do it first if it is m
 - **Overfitting**: our brains are wired to find patterns that might not be there. Sometimes the most simple explanation is correct.
 - **Randomness** as an inspiration for new ideas. *Make your opening page in your browser a random Wikipedia page. Visit the Tumblrverse!*
 - **Computational kindness**: try to limit the computational burden to your friends and family. *Rather than asking your friends for a data to meet (an open problem), give them some two possible dates to meet (a verification problem).*
-- **[Optimal transportation theory](https://michielstock.github.io/OptimalTransport/)**: for dividing desserts among colleagues.
+- **[Optimal transportation theory](/posts/2017/2017-11-5-OptimalTransport/)**: for dividing desserts among colleagues.
