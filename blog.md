@@ -17,6 +17,10 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 ## Posts by year
 
+### 2021
+
+[Softmax demystified](/posts/2021/2021-03-20-softmax/)
+
 ### 2020
 
 [Julia for teaching optimization](/posts/2020/2020-07-28-juliateaching/)
