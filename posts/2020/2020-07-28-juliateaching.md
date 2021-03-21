@@ -1,7 +1,7 @@
 +++
 title = "Julia for teaching optimization"
 hascode = false
-date = Date(2021, 02, 18)
+date = Date(2020, 02, 18)
 rss = "SWOT of Julia for an optimization course."
 +++
 @def tags = ["computing", "code"]

@@ -6,12 +6,12 @@
   <link>https://michielstock.github.io/</link>
   <atom:link href="https://michielstock.github.io/feed.xml" rel="self" type="application/rss+xml" />
   <item>
-    <title><![CDATA[Julia for teaching optimization]]></title>
-    <link>https://michielstock.github.io/posts/2020/2020-07-28-juliateaching/</link>
-    <description><![CDATA[SWOT of Julia for an optimization course.
-<br><a href="https://michielstock.github.io/posts/2020/2020-07-28-juliateaching/">Read more</a>]]></description>
-    <guid>https://michielstock.github.io/posts/2020/2020-07-28-juliateaching/</guid>
-    <pubDate>Thu, 18 Feb 2021 00:00:00 UT</pubDate>
+    <title><![CDATA[Softmax demystified]]></title>
+    <link>https://michielstock.github.io/posts/2021/2021-03-20-softmax/</link>
+    <description><![CDATA[Softmax demystified: a post on the motivation, mathematics and implementation of the softmax
+<br><a href="https://michielstock.github.io/posts/2021/2021-03-20-softmax/">Read more</a>]]></description>
+    <guid>https://michielstock.github.io/posts/2021/2021-03-20-softmax/</guid>
+    <pubDate>Sat, 20 Mar 2021 00:00:00 UT</pubDate>
   </item>
   <item>
     <title><![CDATA[How to take smart notes]]></title>
@@ -36,6 +36,14 @@
 <br><a href="https://michielstock.github.io/posts/2020/2020-05-21-compuational-mixology/">Read more</a>]]></description>
     <guid>https://michielstock.github.io/posts/2020/2020-05-21-compuational-mixology/</guid>
     <pubDate>Thu, 21 May 2020 00:00:00 UT</pubDate>
+  </item>
+  <item>
+    <title><![CDATA[Julia for teaching optimization]]></title>
+    <link>https://michielstock.github.io/posts/2020/2020-07-28-juliateaching/</link>
+    <description><![CDATA[SWOT of Julia for an optimization course.
+<br><a href="https://michielstock.github.io/posts/2020/2020-07-28-juliateaching/">Read more</a>]]></description>
+    <guid>https://michielstock.github.io/posts/2020/2020-07-28-juliateaching/</guid>
+    <pubDate>Tue, 18 Feb 2020 00:00:00 UT</pubDate>
   </item>
   <item>
     <title><![CDATA[On wizardry and Prophecy]]></title>
