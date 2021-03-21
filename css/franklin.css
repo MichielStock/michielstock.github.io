@@ -267,6 +267,7 @@ body { counter-reset: eqnum; }
   white-space: normal;
 }
 
+/*
 .katex-display::after {
   counter-increment: eqnum;
   content: "(" counter(eqnum) ")";
@@ -274,6 +275,7 @@ body { counter-reset: eqnum; }
   float: right;
   padding-right: 5px;
 }
+*/
 
 /* ==================================================================
     CODE & HIGHLIGHT.JS
