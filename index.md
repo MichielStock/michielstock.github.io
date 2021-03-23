@@ -8,7 +8,7 @@ During my PhD, I worked on kernel-based methods to model interactions.
 Afterwards, I spend a couple of years on modelling species interaction networks.
 Now, my main focus is on stochastical modelling and operations research for synthetic biology.
 
-In my spare time, I enjoy reading, running, and boardgames. I am also folling training to become a chef.
+In my spare time, I enjoy reading, running, and boardgames. I am also following training to become a chef.
 
 ![](images/me.jpeg)
 
