@@ -14,10 +14,13 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 * posts with tag [`society`](/tag/society/)
 * posts with tag [`books`](/tag/books/)
 * posts with tag [`productivity`](/tag/productivity/)
+* posts with tag [`biology`](/tags/biology/)
 
 ## Posts by year
 
 ### 2021
+
+[Optimal transportation for species interaction networks](/posts/2021/2021-03-24-otsin/)
 
 [Softmax demystified](/posts/2021/2021-03-20-softmax/)
 
