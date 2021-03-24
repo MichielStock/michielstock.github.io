@@ -156,6 +156,8 @@ A final, rather neat, application of matching distributions is *color transfer*:
 
 ![](/images/2017_optimal_transport/color_transfer.png)
 
+In our work, we have shown that you can use optimal tranport to [model species interaction networks](https://onlinelibrary.wiley.com/doi/10.1002/ece3.7254). The idea is that you have a distribution of, say, pollinators and flowers and a given preference matrix for the interactions. Optimal transport can give the observed coupling between the species. Check out the specific [blog post](/posts/2021/2021-03-24-otsin) on this topic for more information.
+
 ### Finding a distance between two distributions
 
 Often, we are interested in comparing complex objects or distributions, for example, if we use kernel-based learning algorithms. The Wasserstein or Sinkhorn distance is a much more flexible way to compare distributions than, say, the [Kullback-Leibler divergence](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence). This is because the cost function allows us to incorporate valuable prior knowledge into the metric!
