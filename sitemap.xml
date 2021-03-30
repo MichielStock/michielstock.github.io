@@ -3,7 +3,7 @@
 
 <url>
     <loc>https://michielstock.github.io/posts/2020/2020-07-28-juliateaching/index.html</loc>
-    <lastmod>2021-03-19</lastmod>
+    <lastmod>2021-03-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -39,7 +39,7 @@
 </url>
 <url>
     <loc>https://michielstock.github.io/index.html</loc>
-    <lastmod>2021-02-20</lastmod>
+    <lastmod>2021-03-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -64,6 +64,12 @@
 <url>
     <loc>https://michielstock.github.io/posts/2019/2019-09-02-doomsday/index.html</loc>
     <lastmod>2021-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2021/2021-03-24-otsin/index.html</loc>
+    <lastmod>2021-03-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -93,7 +99,7 @@
 </url>
 <url>
     <loc>https://michielstock.github.io/blog/index.html</loc>
-    <lastmod>2021-03-19</lastmod>
+    <lastmod>2021-03-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
