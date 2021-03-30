@@ -58,7 +58,9 @@
 </li>
 </ul>
 <p>A way to solve this is using <em>smooth max operators</em>, were we apply some kind or regulariser \(\Omega\) to improve the properties of our maximum:</p>
-\[{\max}_\Omega(\mathbf{x}) = \max_{\mathbf{q}\in \triangle^{n-1}}\langle\, \mathbf{q}, \mathbf{x}\rangle - \Omega(\mathbf{x})\,.\]
+\[
+{\max}_\Omega(\mathbf{x}) = \max_{\mathbf{q}\in \triangle^{n-1}}\langle\, \mathbf{q}, \mathbf{x}\rangle - \Omega(\mathbf{q})\,.
+\]
 <p>Here, \(\triangle^{n-1}\) denotes the probability <a href="https://en.wikipedia.org/wiki/Simplex">simplex</a>. So, one can understand the plain old maximum as the largest convex combination of a set of numbers, which of course, boils down to taking the largest element. The smoothed maximum allows one to regularise these weights, infusing them with some nicer properties.</p>
 <p>One nice regularizing function is the <em>Shannon entropy</em>:</p>
 \[
@@ -76,9 +78,9 @@ H(\mathbf{q}) = -\sum_{i=1}^nq_i\log(q_i)\,,
 \[
 \max(\mathbf{x}) < {\max}_{-\gamma H}(\mathbf{x}) \le \max(\mathbf{x})  + \gamma\log(n)\,.
 \]
-<p>So, how does the softmax factor in? Well, the softmax is a bit of a misnomer, since the log-sum-exp is a &quot;soft&quot; max, the softmax is a &quot;soft&quot; <em>arg</em>max&#33; The argmax of a smoothed max its gradient:</p>
+<p>So, how does the softmax factor in? Well, the softmax is a bit of a misnomer, since the log-sum-exp is a &quot;soft&quot; max, the softmax is a &quot;soft&quot; <em>arg</em>max&#33; The gradient a smoothed max its argmax:</p>
 \[
-\text{arg max}_\Omega(\mathbf{x}) = \nabla_\mathbf{q} \max_{\mathbf{q}\in \triangle^{n-1}}\langle\, \mathbf{q}, \mathbf{x}\rangle - \Omega(\mathbf{x})\,.
+\nabla\, {\max}_\Omega(\mathbf{x}) = \text{arg max}_{\mathbf{q}\in \triangle^{n-1}} \langle\, \mathbf{q}, \mathbf{x}\rangle - \Omega(\mathbf{q})\,.
 \]
 <p>This argmax is nothing more than the \(\mathbf{q}\) one has to find in the definition of the smoothed maximum. In a regular maximum, the argmax point unambiguously towards the largest element. For smoothed maxima, their respective argmaxes point toward the <em>degree</em> to which each element in \(\mathbf{x}\) contributes to the maximum. Hence, using entropy as a regulariser, we obtain the well-known softmax:</p>
 \[
@@ -169,7 +171,7 @@ plot&#40;&#40;bar&#40;gumbelsoftmax&#40;x, κ&#61;κ&#41;, label&#61;&quot;&quot
 <p><sup id="fnref:gumbel"><a href="#fndef:gumbel" class="fnref">[2]</a></sup> A Gumbel distribution arises in extreme-value theory. Whereas a Normal distribution is suitable to model a sample mean, the Gumbel distribution is often appropriate to model the maximum of a sample.</p>
 <div class="page-foot">
   <div class="copyright">
-    &copy; Michiel Stock. Last modified: March 21, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Michiel Stock. Last modified: March 29, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div><!-- CONTENT ENDS HERE -->
