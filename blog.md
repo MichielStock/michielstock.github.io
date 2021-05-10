@@ -20,6 +20,8 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 ### 2021
 
+[No more objective functions?](/posts/2021/2021-05-10-nonobjective/)
+
 [Optimal transportation for species interaction networks](/posts/2021/2021-03-24-otsin/)
 
 [Softmax demystified](/posts/2021/2021-03-20-softmax/)
