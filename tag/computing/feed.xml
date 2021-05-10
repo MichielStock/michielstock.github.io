@@ -1,54 +1,118 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-<channel>
-  <title><![CDATA[Maximum Entropy]]></title>
-  <description><![CDATA[A blog about books, computation and biology
-]]></description>
-  <link>https://michielstock.github.io/</link>
-  <atom:link href="https://michielstock.github.io/tag/computing/feed.xml" rel="self" type="application/rss+xml" />
-  <item>
-    <title><![CDATA[Julia for teaching optimization]]></title>
-    <link>https://michielstock.github.io/posts/2020/2020-07-28-juliateaching/</link>
-    <description><![CDATA[SWOT of Julia for an optimization course.
-<br><a href="https://michielstock.github.io/posts/2020/2020-07-28-juliateaching/">Read more</a>]]></description>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rss version="2.0"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:media="http://search.yahoo.com/mrss/"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:georss="http://www.georss.org/georss">
+
+  <channel>
+    <title>
+      <![CDATA[  {{fd2rss website_title}}  ]]>
+    </title>
+    <link> {{website_url}} </link>
+    <description>
+      <![CDATA[  {{fd2rss website_description}}  ]]>
+    </description>
+    <atom:link
+      href="{{fd_rss_feed_url}}"
+      rel="self"
+      type="application/rss+xml" />
+
+
+<item>
+  <title>
+    <![CDATA[  Julia for teaching optimization  ]]>
+  </title>
+  <link> https://michielstock.github.io/posts/2020/2020-07-28-juliateaching/index.html </link>
+  <guid> https://michielstock.github.io/posts/2020/2020-07-28-juliateaching/index.html </guid>
+  <description>
+    <![CDATA[  SWOT of Julia for an optimization course.  ]]>
+  </description>  
     
-    <guid>https://michielstock.github.io/posts/2020/2020-07-28-juliateaching/</guid>
-    <pubDate>Tue, 18 Feb 2020 00:00:00 UT</pubDate>
-  </item>
-  <item>
-    <title><![CDATA[Uncertainty propagation and high-dimensional indexing in Julia]]></title>
-    <link>https://michielstock.github.io/posts/2019/2019-06-13-julia/</link>
-    <description><![CDATA[Some cool examples of Julia&#39;s type system and higher-order matrices&#33;
-<br><a href="https://michielstock.github.io/posts/2019/2019-06-13-julia/">Read more</a>]]></description>
+  <pubDate>Tue, 18 Feb 2020 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Michiel Stock</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
+    <![CDATA[  Uncertainty propagation and high-dimensional indexing in Julia  ]]>
+  </title>
+  <link> https://michielstock.github.io/posts/2019/2019-06-13-julia/index.html </link>
+  <guid> https://michielstock.github.io/posts/2019/2019-06-13-julia/index.html </guid>
+  <description>
+    <![CDATA[  Some cool examples of Julia&#39;s type system and higher-order matrices&#33;  ]]>
+  </description>  
     
-    <guid>https://michielstock.github.io/posts/2019/2019-06-13-julia/</guid>
-    <pubDate>Thu, 13 Jun 2019 00:00:00 UT</pubDate>
-  </item>
-  <item>
-    <title><![CDATA[On recovering matrices]]></title>
-    <link>https://michielstock.github.io/posts/2019/2019-04-16-nuclear/</link>
-    <description><![CDATA[Some thoughts about matrix recovery with matrix regularization.
-<br><a href="https://michielstock.github.io/posts/2019/2019-04-16-nuclear/">Read more</a>]]></description>
+  <pubDate>Thu, 13 Jun 2019 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Michiel Stock</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
+    <![CDATA[  On recovering matrices  ]]>
+  </title>
+  <link> https://michielstock.github.io/posts/2019/2019-04-16-nuclear/index.html </link>
+  <guid> https://michielstock.github.io/posts/2019/2019-04-16-nuclear/index.html </guid>
+  <description>
+    <![CDATA[  Some thoughts about matrix recovery with matrix regularization.  ]]>
+  </description>  
     
-    <guid>https://michielstock.github.io/posts/2019/2019-04-16-nuclear/</guid>
-    <pubDate>Tue, 16 Apr 2019 00:00:00 UT</pubDate>
-  </item>
-  <item>
-    <title><![CDATA[Sorting socks and other practical uses of algorithms]]></title>
-    <link>https://michielstock.github.io/posts/2017/2017-12-20-Algorithms/</link>
-    <description><![CDATA[Recently, I came across the book &#39;<a href="https://www.goodreads.com/book/show/34150973-algorithms-to-live-by">Algorithms to Live by: The Computer Science of Human Decisions</a>&#39;. Part self-help book on organizing, part popular science, it made for both an enjoyable and exciting read. In the different chapters, the authors discussed various computer science problems and how the solutions are relevant to more mundane issues, such as how to seat guests at a wedding party or deal with being stood up for a date.
-<br><a href="https://michielstock.github.io/posts/2017/2017-12-20-Algorithms/">Read more</a>]]></description>
+  <pubDate>Tue, 16 Apr 2019 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Michiel Stock</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
+    <![CDATA[  Sorting socks and other practical uses of algorithms  ]]>
+  </title>
+  <link> https://michielstock.github.io/posts/2017/2017-12-20-Algorithms/index.html </link>
+  <guid> https://michielstock.github.io/posts/2017/2017-12-20-Algorithms/index.html </guid>
+  <description>
+    <![CDATA[  Recently, I came across the book &#39;<a href="https://www.goodreads.com/book/show/34150973-algorithms-to-live-by">Algorithms to Live by: The Computer Science of Human Decisions</a>&#39;. Part self-help book on organizing, part popular science, it made for both an enjoyable and exciting read. In the different chapters, the authors discussed various computer science problems and how the solutions are relevant to more mundane issues, such as how to seat guests at a wedding party or deal with being stood up for a date.  ]]>
+  </description>  
     
-    <guid>https://michielstock.github.io/posts/2017/2017-12-20-Algorithms/</guid>
-    <pubDate>Wed, 20 Dec 2017 00:00:00 UT</pubDate>
-  </item>
-  <item>
-    <title><![CDATA[Notes on Optimal Transport]]></title>
-    <link>https://michielstock.github.io/posts/2017/2017-11-5-OptimalTransport/</link>
-    <description><![CDATA[Accessible intro to optimal transportation theory, with applications in machine learning and image processing.
-<br><a href="https://michielstock.github.io/posts/2017/2017-11-5-OptimalTransport/">Read more</a>]]></description>
+  <pubDate>Wed, 20 Dec 2017 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Michiel Stock</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
+    <![CDATA[  Notes on Optimal Transport  ]]>
+  </title>
+  <link> https://michielstock.github.io/posts/2017/2017-11-5-OptimalTransport/index.html </link>
+  <guid> https://michielstock.github.io/posts/2017/2017-11-5-OptimalTransport/index.html </guid>
+  <description>
+    <![CDATA[  Accessible intro to optimal transportation theory, with applications in machine learning and image processing.  ]]>
+  </description>  
     
-    <guid>https://michielstock.github.io/posts/2017/2017-11-5-OptimalTransport/</guid>
-    <pubDate>Sun, 5 Nov 2017 00:00:00 UT</pubDate>
-  </item>
-</channel>
-</rss>
+  <pubDate>Sun, 05 Nov 2017 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Michiel Stock</atom:name>
+  </atom:author>
+        
+</item>
+</channel></rss>
