@@ -20,6 +20,8 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 ### 2021
 
+[📚Ingredients](/posts/2021/2021-07-14-ingredients/)
+
 [📚The Righteous Mind](/posts/2021/2021-07-06-righteous/)
 
 [No more objective functions?](/posts/2021/2021-05-10-nonobjective/)

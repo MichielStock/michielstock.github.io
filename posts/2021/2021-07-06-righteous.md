@@ -10,7 +10,7 @@ rss = "Summary of 'The Righteous Mind, by Jonathan Haidt"
 
 author: Jonathan Haidt
 
-related books: [The Happiness Hypothesis](https://www.goodreads.com/book/show/96884.The_Happiness_Hypothesis), [Blueprint](https://www.goodreads.com/book/show/96884.The_Happiness_Hypothesis#), [Thinking Fast and Slow](https://www.goodreads.com/book/show/11468377-thinking-fast-and-slow)
+elated books: [The Happiness Hypothesis](https://www.goodreads.com/book/show/96884.The_Happiness_Hypothesis), [Blueprint](https://www.goodreads.com/book/show/40696923-blueprint), [Thinking Fast and Slow](https://www.goodreads.com/book/show/11468377-thinking-fast-and-slow)
 
 ![](https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1534528902l/11324722._SY475_.jpg)
 
