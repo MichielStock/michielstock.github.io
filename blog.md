@@ -20,6 +20,8 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 ### 2021
 
+[📚The Universal Rights of Plants](/posts/2021/2021-08-06-rightsofplants/)
+
 [📚Scale](/posts/2021/2021-07-22-scale/)
 
 [📚Ingredients](/posts/2021/2021-07-14-ingredients/)
