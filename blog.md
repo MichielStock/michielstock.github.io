@@ -20,6 +20,8 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 ### 2021
 
+[Newton fractal](/posts/2021/2021-10-17-fractal/)
+
 [📚The Universal Rights of Plants](/posts/2021/2021-08-06-rightsofplants/)
 
 [📚Scale](/posts/2021/2021-07-22-scale/)
