@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+     <link rel="stylesheet" href="/libs/katex/katex.min.css">
+     
+     <link rel="stylesheet" href="/libs/highlight/github.min.css">
+   
+    <link rel="stylesheet" href="/css/franklin.css">
+<link rel="stylesheet" href="/css/tufte.css">
+<link rel="stylesheet" href="/css/latex.css">
+<link rel="stylesheet" href="/css/adjust.css"> <!-- sheet to overwrite some clashing styles -->
+<link rel="icon" href="/assets/favicon.png">
+
+     <title>Newton fractal in Julia using Symbolics.jl</title>  
+</head>
+
+<script type="application/javascript">
+	var doNotTrack = false;
+	if (!doNotTrack) {
+		window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+		ga('create', 'UA-110926897-1', 'auto');
+		ga('send', 'pageview');
+	}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+<body>
+<div id="layout">
+  <div id="menu">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/CV/">CV</a></li>
+      <li><a href="/research/">Research</a></li>
+      <li><a href="/blog/">Blog</a></li>
+    </ul>
+  </div>
+  <div id="main">
+
+
+
+<!-- Content appended here -->
+<div class="franklin-content">
+<h1 id="newton_fractal_in_julia_using_symbolicsjl"><a href="#newton_fractal_in_julia_using_symbolicsjl" class="header-anchor">Newton fractal in Julia using Symbolics.jl</a></h1>
+<p>The <a href="https://www.youtube.com/watch?v&#61;-RdOwhmqP5s">most recent video</a> of 3blue1brown covered Newton fractals, a family of fractal curves that are obtained by applying  Newton&#39;s method to complex numbers. Since I am covering Newton&#39;s method in my optimization course this week, it might be an entertaining illustration to play around with this topic.</p>
+<h2 id="newtons_method"><a href="#newtons_method" class="header-anchor">Newton&#39;s method</a></h2>
+<p>Newton&#39;s method is a <em>root-finding</em> algorithm. We can use it to find roots of a function \(f\), i.e., inputs \(x\) for which it holds that \(f(x)=0\). </p>
+<p>When executing Newton&#39;s method, we start with an initial \(x\) and iteratively apply the following rule till convergence:</p>
+\[
+x \mapsto x - \frac{f(x)}{f'(x)}\,.
+\]
+<p>This rule can be derived by taking the first-order Taylor approximation of \(f(x+h)\) in \(x\) and solving for the step \(h\) that sets the approximation to zero.</p>
+<p>Let us apply this to a simple function&#33;</p>
+<pre><code class="language-julia">f&#40;x&#41; &#61; x^3 - 1</code></pre><pre><code class="plaintext">f (generic function with 1 method)</code></pre>
+<p>For most functions, we can compute its derivative, and hence Newton update, easily enough. However, let us be lazy and use this opportunity to use Julia&#39;s new CAS <code>Symbolics.jl</code>. We write a function that takes a function as an input and computes the map above:</p>
+<pre><code class="language-julia">using Symbolics
+
+function get_map&#40;f&#41;
+    # define variable
+    @variables x
+    # define derivative operator
+    Dx &#61; Differential&#40;x&#41;
+    map &#61; x - f&#40;x&#41; / Dx&#40;f&#40;x&#41;&#41; |&gt; expand_derivatives
+    # now we expand and compile to a Julia function
+    update_expr &#61; build_function&#40;map, x&#41;
+    return eval&#40;update_expr&#41;
+end
+
+update &#61; get_map&#40;f&#41;</code></pre><pre><code class="plaintext">#91 (generic function with 1 method)</code></pre>
+<p>Yes&#33; We get a new function: the update map&#33; Let us try it on a value \(x=2\)</p>
+<pre><code class="language-julia">update&#40;2.0&#41;  # apply map once</code></pre><pre><code class="plaintext">1.4166666666666665</code></pre>
+<pre><code class="language-julia">update&#40;update&#40;2.0&#41;&#41;  # apply map twice</code></pre><pre><code class="plaintext">1.1105344098423682</code></pre>
+<pre><code class="language-julia">update&#40;update&#40;update&#40;2.0&#41;&#41;&#41;  # apply map trice</code></pre><pre><code class="plaintext">1.0106367684045563</code></pre>
+<pre><code class="language-julia">update&#40;update&#40;update&#40;update&#40;2.0&#41;&#41;&#41;&#41;  # apply map four times</code></pre><pre><code class="plaintext">1.0001115573039492</code></pre>
+<p>We see that after a couple of steps, the Newton method converges to the root \(x=1\).</p>
+<p>For our convenience, let us define a function that applies this map \(n\) times.</p>
+<pre><code class="language-julia">function applyiteratively&#40;x, update; n&#61;100&#41;
+    for i in 1:n
+        x &#61; update&#40;x&#41;
+    end
+    return x
+end
+
+applyiteratively&#40;2.0, update&#41;  # apply 100 times</code></pre><pre><code class="plaintext">1.0</code></pre>
+<h2 id="complex_roots"><a href="#complex_roots" class="header-anchor">Complex roots</a></h2>
+<p>Astute readers might have noticed that \(x^3-1\) has three roots: one real &#40;\(x=1\)&#41; and two complex ones &#40;\(x=-1/2+\sqrt{3}i/2\) and \(x=-1/2-\sqrt{3}i/2\)&#41;. Would our method also work with complex inputs?</p>
+<pre><code class="language-julia">applyiteratively&#40;-2.0 - 2.0im, update&#41;</code></pre><pre><code class="plaintext">-0.5 - 0.8660254037844387im</code></pre>
+<p>We see that this converges to a different &#40;complex&#41; root&#33; Other values might converge to different roots&#33; </p>
+<pre><code class="language-julia">applyiteratively&#40;2.0 &#43; 2.0im, update&#41;</code></pre><pre><code class="plaintext">1.0 + 0.0im</code></pre>
+<h2 id="the_newton_fractal"><a href="#the_newton_fractal" class="header-anchor">The Newton fractal</a></h2>
+<p>Imagine that we try this process for many complex numbers in an interval. Depending on the initial starting input, we end up in a different root. By colouring the results according to the root we end up in, we obtain the <em>Newton fractal</em>.</p>
+<pre><code class="language-julia">lower &#61; -2 - 2im
+upper &#61; 2 &#43; 2im
+
+step &#61; 0.5e-2
+
+# generate a range of complex values
+Z0 &#61; &#91;a&#43;b*im for b in real&#40;lower&#41;:step:real&#40;upper&#41;,
+                    a in imag&#40;lower&#41;:step:imag&#40;upper&#41;&#93;
+
+# apply the update 100 times
+Z100 &#61; applyiteratively.&#40;Z0, update&#41;;</code></pre>
+<p>This results in a large complex matrix. We might define a colourmap for complex numbers as done <a href="https://vqm.uni-graz.at/pages/colormap.html">here</a>, though plotting the angle of the complex number in polar coordinates suffices.</p>
+<pre><code class="language-julia">using Plots
+
+heatmap&#40;angle.&#40;Z100&#41;, colorbar&#61;false, color&#61;:rainbow, ticks&#61;false&#41;</code></pre>
+<img src="/assets/posts/2021/2021-10-17-fractal/code/output/fractal.png" alt="">
+<p>Below are some other examples.</p>
+\[
+f(x) = x^8 + 15x^4 -16
+\]
+
+<img src="/assets/posts/2021/2021-10-17-fractal/code/output/fractal2.png" alt="">
+\[
+f(x) = \cosh(x) - 1
+\]
+
+<img src="/assets/posts/2021/2021-10-17-fractal/code/output/fractal3.png" alt="">
+<div class="page-foot">
+  <div class="copyright">
+    &copy; Michiel Stock. Last modified: October 17, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+  </div>
+</div>
+</div><!-- CONTENT ENDS HERE -->
+        </div> <!-- end of id=main -->
+    </div> <!-- end of id=layout -->
+    
+        <script src="/libs/katex/katex.min.js"></script>
+<script src="/libs/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.body)</script>
+
+    
+    
+        <script src="/libs/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();hljs.configure({tabReplace: '    '});</script>
+
+    
+  </body>
+</html>
