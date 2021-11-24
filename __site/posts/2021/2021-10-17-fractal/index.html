@@ -52,7 +52,7 @@ x \mapsto x - \frac{f(x)}{f'(x)}\,.
 \]
 <p>This rule can be derived by taking the first-order Taylor approximation of \(f(x+h)\) in \(x\) and solving for the step \(h\) that sets the approximation to zero.</p>
 <p>Let us apply this to a simple function&#33;</p>
-<pre><code class="language-julia">f&#40;x&#41; &#61; x^3 - 1</code></pre><pre><code class="plaintext">f (generic function with 1 method)</code></pre>
+<pre><code class="language-julia">f&#40;x&#41; &#61; x^3 - 1;</code></pre>
 <p>For most functions, we can compute its derivative, and hence Newton update, easily enough. However, let us be lazy and use this opportunity to use Julia&#39;s new CAS <code>Symbolics.jl</code>. We write a function that takes a function as an input and computes the map above:</p>
 <pre><code class="language-julia">using Symbolics
 
@@ -67,11 +67,11 @@ function get_map&#40;f&#41;
     return eval&#40;update_expr&#41;
 end
 
-update &#61; get_map&#40;f&#41;</code></pre><pre><code class="plaintext">#91 (generic function with 1 method)</code></pre>
+update &#61; get_map&#40;f&#41;</code></pre><pre><code class="plaintext">#1 (generic function with 1 method)</code></pre>
 <p>Yes&#33; We get a new function: the update map&#33; Let us try it on a value \(x=2\)</p>
 <pre><code class="language-julia">update&#40;2.0&#41;  # apply map once</code></pre><pre><code class="plaintext">1.4166666666666665</code></pre>
 <pre><code class="language-julia">update&#40;update&#40;2.0&#41;&#41;  # apply map twice</code></pre><pre><code class="plaintext">1.1105344098423682</code></pre>
-<pre><code class="language-julia">update&#40;update&#40;update&#40;2.0&#41;&#41;&#41;  # apply map trice</code></pre><pre><code class="plaintext">1.0106367684045563</code></pre>
+<pre><code class="language-julia">update&#40;update&#40;update&#40;2.0&#41;&#41;&#41;  # apply map thrice</code></pre><pre><code class="plaintext">1.0106367684045563</code></pre>
 <pre><code class="language-julia">update&#40;update&#40;update&#40;update&#40;2.0&#41;&#41;&#41;&#41;  # apply map four times</code></pre><pre><code class="plaintext">1.0001115573039492</code></pre>
 <p>We see that after a couple of steps, the Newton method converges to the root \(x=1\).</p>
 <p>For our convenience, let us define a function that applies this map \(n\) times.</p>
@@ -119,7 +119,7 @@ f(x) = \cosh(x) - 1
 <img src="/assets/posts/2021/2021-10-17-fractal/code/output/fractal3.png" alt="">
 <div class="page-foot">
   <div class="copyright">
-    &copy; Michiel Stock. Last modified: October 17, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Michiel Stock. Last modified: October 18, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div><!-- CONTENT ENDS HERE -->

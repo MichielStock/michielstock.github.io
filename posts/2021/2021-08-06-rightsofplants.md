@@ -2,7 +2,7 @@
 title = "The Universal Rights of Plants"
 hascode = false
 date = Date(2021, 08, 6)
-rss = "Summary of *The Universal Rights of Plants*, by George Zaidan. A gentle introduction to food science and epidemiology."
+rss = "Summary of *The Universal Rights of Plants*, by Stefano Mancuso. What we can learn from plants"
 +++
 @def tags = ["books", "biology"]
 

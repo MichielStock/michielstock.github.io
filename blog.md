@@ -20,6 +20,8 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 ### 2021
 
+[📚The Flaws That Kill Our Democracy](/posts/2021/2021-11-24-democracy/)
+
 [Newton fractal](/posts/2021/2021-10-17-fractal/)
 
 [📚The Universal Rights of Plants](/posts/2021/2021-08-06-rightsofplants/)
