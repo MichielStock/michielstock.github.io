@@ -8,7 +8,7 @@ rss = "Summary of *The Flaws That Kill Our Democracy*, by Klaas Mensaert. A scie
 
 # The Flaws That Kill Our Democracy
 
-author: Klaas Mensaert
+author: [Klaas Mensaert](https://klaasmensaert.be/)
 
 related books: [How Innovation Works](https://www.goodreads.com/book/show/52219273-how-innovation-works), [Blueprint](https://www.goodreads.com/book/show/40696923-blueprint), [Antifragile](https://www.goodreads.com/book/show/13530973-antifragile?ref=nav_sb_ss_1_11)
 
