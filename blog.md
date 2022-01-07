@@ -18,6 +18,10 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 ## Posts by year
 
+### 2022
+
+[📚Antifragile: Things That Gain From Disorder](/posts/2022/2022-01-07-antifragile/)
+
 ### 2021
 
 [📚The Flaws That Kill Our Democracy](/posts/2021/2021-11-24-democracy/)
@@ -42,7 +46,7 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 [Julia for teaching optimization](/posts/2020/2020-07-28-juliateaching/)
 
-[How to take smart notes](/posts/2020/2020-07-23-how-to-take-smart-notes/)
+[📚How to take smart notes](/posts/2020/2020-07-23-how-to-take-smart-notes/)
 
 [Advice on being effective](/posts/2020/2020-06-17-advice-on-being-effective/)
 

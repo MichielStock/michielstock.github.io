@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  Antifragile: Things That Gain From Disorder  ]]>
+  </title>
+  <link> https://michielstock.github.io/posts/2022/2022-01-07-antifragile/index.html </link>
+  <guid> https://michielstock.github.io/posts/2022/2022-01-07-antifragile/index.html </guid>
+  <description>
+    <![CDATA[  A summary of Taleb&#39;s book &quot;Antifragile&quot;: things that gain from disorder.  ]]>
+  </description>  
+    
+  <pubDate>Fri, 07 Jan 2022 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Michiel Stock</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  Newton fractal in Julia using Symbolics.jl  ]]>
   </title>
   <link> https://michielstock.github.io/posts/2021/2021-10-17-fractal/index.html </link>
