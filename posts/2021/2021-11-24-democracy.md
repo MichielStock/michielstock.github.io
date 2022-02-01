@@ -4,7 +4,7 @@ hascode = false
 date = Date(2021, 08, 6)
 rss = "Summary of *The Flaws That Kill Our Democracy*, by Klaas Mensaert. A scientific approach to improve democracy."
 +++
-@def tags = ["books"]
+@def tags = ["books", "society"]
 
 # The Flaws That Kill Our Democracy
 

@@ -4,7 +4,7 @@ hascode = false
 date = Date(2021, 08, 6)
 rss = "Summary of *The Universal Rights of Plants*, by Stefano Mancuso. What we can learn from plants"
 +++
-@def tags = ["books", "biology"]
+@def tags = ["books", "biology", "society"]
 
 # The Universal Rights of Plants
 
