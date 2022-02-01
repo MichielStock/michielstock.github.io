@@ -117,7 +117,7 @@
 </url>
 <url>
     <loc>https://michielstock.github.io/blog/index.html</loc>
-    <lastmod>2022-01-07</lastmod>
+    <lastmod>2022-02-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -166,6 +166,12 @@
 <url>
     <loc>https://michielstock.github.io/posts/2018/2018-06-24-causality/index.html</loc>
     <lastmod>2021-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2022/2022-02-01-mindstorms/index.html</loc>
+    <lastmod>2022-02-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>

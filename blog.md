@@ -20,6 +20,8 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 ### 2022
 
+[📚Mindstorms: Children, Computers, And Powerful Ideas](/posts/2022/2022-02-01-mindstorms/)
+
 [📚Antifragile: Things That Gain From Disorder](/posts/2022/2022-01-07-antifragile/)
 
 ### 2021
