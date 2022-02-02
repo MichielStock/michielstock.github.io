@@ -12,7 +12,7 @@ I am currently a postdoctoral researcher at the KERMIT (knowledge-based systems)
 
 ## Education and work experience
 
-- **2020-present**: doctoral assistand Ghent University
+- **2020-present**: doctoral assistant Ghent University
   - topic: computational intelligence for synthetic biology
 - **2020-2021**: 10% bioinformatics and machine learning consultant for BioLizard
 - **2017-2020**: FWO postdoc
