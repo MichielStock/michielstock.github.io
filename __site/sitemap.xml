@@ -117,7 +117,7 @@
 </url>
 <url>
     <loc>https://michielstock.github.io/blog/index.html</loc>
-    <lastmod>2022-02-01</lastmod>
+    <lastmod>2022-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -159,7 +159,7 @@
 </url>
 <url>
     <loc>https://michielstock.github.io/posts/2021/2021-11-24-democracy/index.html</loc>
-    <lastmod>2021-11-25</lastmod>
+    <lastmod>2022-02-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -182,6 +182,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://michielstock.github.io/posts/2022/2022-03-20-how_the_world_really_works/index.html</loc>
+    <lastmod>2022-03-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://michielstock.github.io/research/index.html</loc>
     <lastmod>2021-05-10</lastmod>
     <changefreq>monthly</changefreq>
@@ -195,7 +201,7 @@
 </url>
 <url>
     <loc>https://michielstock.github.io/CV/index.html</loc>
-    <lastmod>2021-05-10</lastmod>
+    <lastmod>2022-02-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
