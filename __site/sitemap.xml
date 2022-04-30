@@ -2,26 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-    <loc>https://michielstock.github.io/posts/2021/2021-08-06-rightsofplants/index.html</loc>
-    <lastmod>2022-02-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
     <loc>https://michielstock.github.io/posts/2020/2020-07-28-juliateaching/index.html</loc>
     <lastmod>2021-03-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://michielstock.github.io/404/index.html</loc>
-    <lastmod>2021-02-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://michielstock.github.io/posts/2017/2017-10-14-WeGoSTEM/index.html</loc>
-    <lastmod>2021-02-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -32,7 +14,55 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://michielstock.github.io/posts/2019/2019-12-31-wizardsandprophets/index.html</loc>
+    <loc>https://michielstock.github.io/posts/2018/2018-12-28-books2018/index.html</loc>
+    <lastmod>2021-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2017/2017-11-15-Homo_Deus/index.html</loc>
+    <lastmod>2021-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2018/2018-01-01-Books2017/index.html</loc>
+    <lastmod>2021-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2020/2020-05-21-compuational-mixology/index.html</loc>
+    <lastmod>2021-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/blog/index.html</loc>
+    <lastmod>2022-04-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2021/2021-05-10-nonobjective/index.html</loc>
+    <lastmod>2021-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2019/2019-04-16-nuclear/index.html</loc>
+    <lastmod>2021-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2021/2021-07-22-scale/index.html</loc>
+    <lastmod>2021-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2019/2019-06-13-julia/index.html</loc>
     <lastmod>2021-02-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -44,37 +74,7 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://michielstock.github.io/posts/2021/2021-07-06-righteous/index.html</loc>
-    <lastmod>2021-07-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://michielstock.github.io/posts/2020/2020-06-17-advice-on-being-effective/index.html</loc>
-    <lastmod>2021-02-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://michielstock.github.io/index.html</loc>
-    <lastmod>2021-05-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://michielstock.github.io/posts/2017/2017-11-15-Homo_Deus/index.html</loc>
-    <lastmod>2021-02-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
     <loc>https://michielstock.github.io/posts/2018/2018-01-11-Sketchnotes/index.html</loc>
-    <lastmod>2021-02-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://michielstock.github.io/posts/2018/2018-12-28-books2018/index.html</loc>
     <lastmod>2021-02-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -92,44 +92,62 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://michielstock.github.io/posts/2018/2018-01-01-Books2017/index.html</loc>
+    <loc>https://michielstock.github.io/posts/2021/2021-03-20-softmax/index.html</loc>
+    <lastmod>2021-03-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2021/2021-11-24-democracy/index.html</loc>
+    <lastmod>2022-02-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2022/2022-03-20-how_the_world_really_works/index.html</loc>
+    <lastmod>2022-03-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/CV/index.html</loc>
+    <lastmod>2022-02-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2022/2022-04-30-cocktails2/index.html</loc>
+    <lastmod>2022-04-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2017/2017-10-14-WeGoSTEM/index.html</loc>
     <lastmod>2021-02-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://michielstock.github.io/posts/2020/2020-05-21-compuational-mixology/index.html</loc>
+    <loc>https://michielstock.github.io/posts/2019/2019-12-31-wizardsandprophets/index.html</loc>
     <lastmod>2021-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2021/2021-07-06-righteous/index.html</loc>
+    <lastmod>2021-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/index.html</loc>
+    <lastmod>2021-05-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://michielstock.github.io/posts/2017/2017-10-7-Media-school/index.html</loc>
     <lastmod>2021-02-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://michielstock.github.io/posts/2018/2018-03-07-ConvexSummary/index.html</loc>
-    <lastmod>2021-02-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://michielstock.github.io/blog/index.html</loc>
-    <lastmod>2022-03-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://michielstock.github.io/posts/2021/2021-07-14-ingredients/index.html</loc>
-    <lastmod>2021-07-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://michielstock.github.io/posts/2021/2021-05-10-nonobjective/index.html</loc>
-    <lastmod>2021-07-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -146,20 +164,8 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://michielstock.github.io/posts/2021/2021-03-20-softmax/index.html</loc>
-    <lastmod>2021-03-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
     <loc>https://michielstock.github.io/posts/2020/2020-07-23-how-to-take-smart-notes/index.html</loc>
     <lastmod>2021-02-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://michielstock.github.io/posts/2021/2021-11-24-democracy/index.html</loc>
-    <lastmod>2022-02-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -176,18 +182,6 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://michielstock.github.io/posts/2019/2019-04-16-nuclear/index.html</loc>
-    <lastmod>2021-02-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://michielstock.github.io/posts/2022/2022-03-20-how_the_world_really_works/index.html</loc>
-    <lastmod>2022-03-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
     <loc>https://michielstock.github.io/research/index.html</loc>
     <lastmod>2021-05-10</lastmod>
     <changefreq>monthly</changefreq>
@@ -200,20 +194,44 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://michielstock.github.io/CV/index.html</loc>
-    <lastmod>2022-02-02</lastmod>
+    <loc>https://michielstock.github.io/posts/2021/2021-08-06-rightsofplants/index.html</loc>
+    <lastmod>2022-02-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://michielstock.github.io/posts/2021/2021-07-22-scale/index.html</loc>
-    <lastmod>2021-07-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://michielstock.github.io/posts/2019/2019-06-13-julia/index.html</loc>
+    <loc>https://michielstock.github.io/404/index.html</loc>
     <lastmod>2021-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2020/2020-06-17-advice-on-being-effective/index.html</loc>
+    <lastmod>2021-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2021/2021-07-14-ingredients/index.html</loc>
+    <lastmod>2021-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2018/2018-03-07-ConvexSummary/index.html</loc>
+    <lastmod>2021-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2022/cocktails.jl</loc>
+    <lastmod>2022-04-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/pluto/cocktails/</loc>
+    <lastmod>2022-04-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>

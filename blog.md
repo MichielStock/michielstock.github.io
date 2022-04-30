@@ -26,6 +26,8 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 [📚How the World Really Works](/posts/2022/2022-03-20-how_the_world_really_works/)
 
+[Modelling cocktail shaking](/posts/2022/cocktails.jl/)
+
 ### 2021
 
 [📚The Flaws That Kill Our Democracy](/posts/2021/2021-11-24-democracy/)
