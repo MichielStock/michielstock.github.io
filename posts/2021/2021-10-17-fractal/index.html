@@ -67,14 +67,14 @@ function get_map&#40;f&#41;
     return eval&#40;update_expr&#41;
 end
 
-update &#61; get_map&#40;f&#41;</code></pre><pre><code class="plaintext">#1 (generic function with 1 method)</code></pre>
+update &#61; get_map&#40;f&#41;</code></pre><pre><code class="plaintext code-output">#1 (generic function with 1 method)</code></pre>
 <p>Yes&#33; We get a new function: the update map&#33; Let us try it on a value \(x=2\)</p>
-<pre><code class="language-julia">update&#40;2.0&#41;  # apply map once</code></pre><pre><code class="plaintext">1.4166666666666665</code></pre>
-<pre><code class="language-julia">update&#40;update&#40;2.0&#41;&#41;  # apply map twice</code></pre><pre><code class="plaintext">UndefVarError: update not defined
+<pre><code class="language-julia">update&#40;2.0&#41;  # apply map once</code></pre><pre><code class="plaintext code-output">1.4166666666666665</code></pre>
+<pre><code class="language-julia">update&#40;update&#40;2.0&#41;&#41;  # apply map twice</code></pre><pre><code class="plaintext code-output">UndefVarError: update not defined
 </code></pre>
-<pre><code class="language-julia">update&#40;update&#40;update&#40;2.0&#41;&#41;&#41;  # apply map thrice</code></pre><pre><code class="plaintext">UndefVarError: update not defined
+<pre><code class="language-julia">update&#40;update&#40;update&#40;2.0&#41;&#41;&#41;  # apply map thrice</code></pre><pre><code class="plaintext code-output">UndefVarError: update not defined
 </code></pre>
-<pre><code class="language-julia">update&#40;update&#40;update&#40;update&#40;2.0&#41;&#41;&#41;&#41;  # apply map four times</code></pre><pre><code class="plaintext">UndefVarError: update not defined
+<pre><code class="language-julia">update&#40;update&#40;update&#40;update&#40;2.0&#41;&#41;&#41;&#41;  # apply map four times</code></pre><pre><code class="plaintext code-output">UndefVarError: update not defined
 </code></pre>
 <p>We see that after a couple of steps, the Newton method converges to the root \(x=1\).</p>
 <p>For our convenience, let us define a function that applies this map \(n\) times.</p>
@@ -85,14 +85,14 @@ update &#61; get_map&#40;f&#41;</code></pre><pre><code class="plaintext">#1 (gen
     return x
 end
 
-applyiteratively&#40;2.0, update&#41;  # apply 100 times</code></pre><pre><code class="plaintext">UndefVarError: update not defined
+applyiteratively&#40;2.0, update&#41;  # apply 100 times</code></pre><pre><code class="plaintext code-output">UndefVarError: update not defined
 </code></pre>
 <h2 id="complex_roots"><a href="#complex_roots" class="header-anchor">Complex roots</a></h2>
 <p>Astute readers might have noticed that \(x^3-1\) has three roots: one real &#40;\(x=1\)&#41; and two complex ones &#40;\(x=-1/2+\sqrt{3}i/2\) and \(x=-1/2-\sqrt{3}i/2\)&#41;. Would our method also work with complex inputs?</p>
-<pre><code class="language-julia">applyiteratively&#40;-2.0 - 2.0im, update&#41;</code></pre><pre><code class="plaintext">UndefVarError: update not defined
+<pre><code class="language-julia">applyiteratively&#40;-2.0 - 2.0im, update&#41;</code></pre><pre><code class="plaintext code-output">UndefVarError: update not defined
 </code></pre>
 <p>We see that this converges to a different &#40;complex&#41; root&#33; Other values might converge to different roots&#33; </p>
-<pre><code class="language-julia">applyiteratively&#40;2.0 &#43; 2.0im, update&#41;</code></pre><pre><code class="plaintext">UndefVarError: update not defined
+<pre><code class="language-julia">applyiteratively&#40;2.0 &#43; 2.0im, update&#41;</code></pre><pre><code class="plaintext code-output">UndefVarError: update not defined
 </code></pre>
 <h2 id="the_newton_fractal"><a href="#the_newton_fractal" class="header-anchor">The Newton fractal</a></h2>
 <p>Imagine that we try this process for many complex numbers in an interval. Depending on the initial starting input, we end up in a different root. By colouring the results according to the root we end up in, we obtain the <em>Newton fractal</em>.</p>
@@ -106,25 +106,25 @@ Z0 &#61; &#91;a&#43;b*im for b in real&#40;lower&#41;:step:real&#40;upper&#41;,
                     a in imag&#40;lower&#41;:step:imag&#40;upper&#41;&#93;
 
 # apply the update 100 times
-Z100 &#61; applyiteratively.&#40;Z0, update&#41;;</code></pre><pre><code class="plaintext">UndefVarError: update not defined
+Z100 &#61; applyiteratively.&#40;Z0, update&#41;;</code></pre><pre><code class="plaintext code-output">UndefVarError: update not defined
 </code></pre>
 <p>This results in a large complex matrix. We might define a colourmap for complex numbers as done <a href="https://vqm.uni-graz.at/pages/colormap.html">here</a>, though plotting the angle of the complex number in polar coordinates suffices.</p>
 <pre><code class="language-julia">using Plots
 
-heatmap&#40;angle.&#40;Z100&#41;, colorbar&#61;false, color&#61;:rainbow, ticks&#61;false&#41;</code></pre><pre><code class="plaintext">UndefVarError: Z100 not defined
+heatmap&#40;angle.&#40;Z100&#41;, colorbar&#61;false, color&#61;:rainbow, ticks&#61;false&#41;</code></pre><pre><code class="plaintext code-output">UndefVarError: Z100 not defined
 </code></pre>
 <img src="/assets/posts/2021/2021-10-17-fractal/code/output/fractal.png" alt="">
 <p>Below are some other examples.</p>
 \[
 f(x) = x^8 + 15x^4 -16
 \]
-<pre><code class="plaintext">UndefVarError: get_map not defined
+<pre><code class="plaintext code-output">UndefVarError: get_map not defined
 </code></pre>
 <img src="/assets/posts/2021/2021-10-17-fractal/code/output/fractal2.png" alt="">
 \[
 f(x) = \cosh(x) - 1
 \]
-<pre><code class="plaintext">UndefVarError: get_map not defined
+<pre><code class="plaintext code-output">UndefVarError: get_map not defined
 </code></pre>
 <img src="/assets/posts/2021/2021-10-17-fractal/code/output/fractal3.png" alt="">
 <div class="page-foot">

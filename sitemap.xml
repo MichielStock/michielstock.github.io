@@ -39,7 +39,7 @@
 </url>
 <url>
     <loc>https://michielstock.github.io/blog/index.html</loc>
-    <lastmod>2022-04-30</lastmod>
+    <lastmod>2022-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -220,6 +220,18 @@
 <url>
     <loc>https://michielstock.github.io/posts/2018/2018-03-07-ConvexSummary/index.html</loc>
     <lastmod>2021-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2022/2022-06-16-SPNs/</loc>
+    <lastmod>2022-06-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/pluto/SPNs/</loc>
+    <lastmod>2022-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
