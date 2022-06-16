@@ -28,6 +28,8 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 [Modelling cocktail shaking](/posts/2022/cocktails.jl/)
 
+[Sum-product networks](/posts/2022/2022-06-16-SPNs/)
+
 ### 2021
 
 [📚The Flaws That Kill Our Democracy](/posts/2021/2021-11-24-democracy/)
