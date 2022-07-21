@@ -30,6 +30,8 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 [Sum-product networks](/posts/2022/2022-06-16-SPNs/)
 
+[📚Build: An Unorthodox Guide to Making Things Worth Making](/posts/2022/2022-07-21-build/)
+
 ### 2021
 
 [📚The Flaws That Kill Our Democracy](/posts/2021/2021-11-24-democracy/)
