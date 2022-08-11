@@ -32,7 +32,7 @@ My task is clear: divide these desserts in such a way that people get their port
 
 Let us introduce some notation so we can formally state this as an optimization problem. Let $\mathbf{r}$ be the vector containing the amount of dessert every person can eat. In this case $\mathbf{r} = (3,3,3,4,2,2,2,1)^\intercal$ (in general the dimension of $\mathbf{r}$ is $n$). Similarly, $\mathbf{c}$ denotes the vector of how much there is of every dessert, i.e. $\mathbf{c}=(4, 2, 6, 4, 4)^\intercal$ (in general the dimension of $\mathbf{c}$ is $m$). Often $\mathbf{r}$ and $\mathbf{c}$ represent marginal probability distributions, hence their values sum to one.
 
-Let $U(\mathbf{r}, \mathbf{c})$ be the set of positive $n\times m$ matrices for which the rows sum to $\mathbf{r}$ and the columns sum to $\mathbf{c}$:
+Let $U(\mathbf{r}, \mathbf{c})$ be the set of positive $n\times m$ matrices for which the columns sum to $\mathbf{r}$ and the rows sum to $\mathbf{c}$:
 
 $U(\mathbf{r}, \mathbf{c}) = \{P\in \mathbb{R}_{>0}^{n\times m}\mid P\mathbf{1}_m = \mathbf{r}, P^\intercal\mathbf{1}_n = \mathbf{c}\}\,.$
 
