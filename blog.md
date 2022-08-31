@@ -34,7 +34,7 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 [📚Transformer: The Deep Chemistry of Life and Death](/posts/2022/2022-08-17-Transformer/)
 
-[📚De Wereld Red je Niet met Minder](/posts/2022/2022-08-31-minder/) (⚠ in dutch)
+[📚De wereld red je niet met minder](/posts/2022/2022-08-31-minder/) (⚠ in dutch)
 
 ### 2021
 
