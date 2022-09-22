@@ -39,7 +39,7 @@
 </url>
 <url>
     <loc>https://michielstock.github.io/blog/index.html</loc>
-    <lastmod>2022-09-04</lastmod>
+    <lastmod>2022-09-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -118,6 +118,12 @@
 <url>
     <loc>https://michielstock.github.io/posts/2022/2022-03-20-how_the_world_really_works/index.html</loc>
     <lastmod>2022-03-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2022/2022-09-22-stoicism/index.html</loc>
+    <lastmod>2022-09-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
