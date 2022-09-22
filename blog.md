@@ -38,6 +38,8 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 [📚A Thousand Brains](/posts/2022/2022-09-04-1000brains/)
 
+[📚The Little Book of Stoicism](/posts/2022/2022-09-22-stoicism/)
+
 ### 2021
 
 [📚The Flaws That Kill Our Democracy](/posts/2021/2021-11-24-democracy/)
