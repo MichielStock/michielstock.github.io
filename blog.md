@@ -40,6 +40,8 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 [📚The Little Book of Stoicism](/posts/2022/2022-09-22-stoicism/)
 
+[Hyperdimensional computing](/posts/2022/2022-10-04-HDVtutorial/)
+
 ### 2021
 
 [📚The Flaws That Kill Our Democracy](/posts/2021/2021-11-24-democracy/)
