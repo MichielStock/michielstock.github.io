@@ -10,7 +10,7 @@ Now, my main focus is on stochastical modelling and operations research for synt
 
 In my spare time, I enjoy reading, running, and boardgames. I am also following training to become a chef.
 
-![](images/me.jpeg)
+![](images/me.JPG)
 
 ## Contact
 
