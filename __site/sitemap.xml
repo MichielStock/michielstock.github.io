@@ -39,7 +39,7 @@
 </url>
 <url>
     <loc>https://michielstock.github.io/blog/index.html</loc>
-    <lastmod>2022-10-04</lastmod>
+    <lastmod>2022-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -254,14 +254,14 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://michielstock.github.io/posts/2022/2022-06-16-SPNs/</loc>
-    <lastmod>2022-06-16</lastmod>
+    <loc>https://michielstock.github.io/posts/2022/2022-10-16-evolinnov/index.html</loc>
+    <lastmod>2022-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://michielstock.github.io/posts/2022/2022-10-04-HDVtutorial.jl</loc>
-    <lastmod>2022-10-04</lastmod>
+    <loc>https://michielstock.github.io/posts/2022/2022-06-16-SPNs/</loc>
+    <lastmod>2022-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -280,6 +280,12 @@
 <url>
     <loc>https://michielstock.github.io/pluto/cocktails/</loc>
     <lastmod>2022-04-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2022/2022-10-04-HDVtutorial/</loc>
+    <lastmod>2022-10-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>

@@ -42,6 +42,8 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 [Hyperdimensional computing](/posts/2022/2022-10-04-HDVtutorial/)
 
+[📚The Origins of Evolutionary Innovations](/posts/2022/2022-10-16-evolinnov/)
+
 ### 2021
 
 [📚The Flaws That Kill Our Democracy](/posts/2021/2021-11-24-democracy/)
