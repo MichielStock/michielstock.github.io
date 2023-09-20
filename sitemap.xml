@@ -14,6 +14,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://michielstock.github.io/posts/2023/2023-09-20-thinking_in_systems/index.html</loc>
+    <lastmod>2023-09-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://michielstock.github.io/posts/2018/2018-12-28-books2018/index.html</loc>
     <lastmod>2021-02-20</lastmod>
     <changefreq>monthly</changefreq>
@@ -39,7 +45,7 @@
 </url>
 <url>
     <loc>https://michielstock.github.io/blog/index.html</loc>
-    <lastmod>2022-10-17</lastmod>
+    <lastmod>2023-09-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
