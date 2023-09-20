@@ -18,6 +18,10 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 ## Posts by year
 
+### 2023
+
+[📚Thinking in Systems: A Primer](/posts/2023/2023-09-20-thinking_in_systems/)
+
 ### 2022
 
 [📚Mindstorms: Children, Computers, And Powerful Ideas](/posts/2022/2022-02-01-mindstorms/)
