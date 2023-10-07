@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  Modeling and Simulation in Python  ]]>
+  </title>
+  <link> https://michielstock.github.io/posts/2023/2023-10-07-ModSim-python/index.html </link>
+  <guid> https://michielstock.github.io/posts/2023/2023-10-07-ModSim-python/index.html </guid>
+  <description>
+    <![CDATA[  Introduction Modeling and Simulation in Python  ]]>
+  </description>  
+    
+  <pubDate>Sat, 07 Oct 2023 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Michiel Stock</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  Optimal transportation for ecological networks  ]]>
   </title>
   <link> https://michielstock.github.io/posts/2021/2021-03-24-otsin/index.html </link>

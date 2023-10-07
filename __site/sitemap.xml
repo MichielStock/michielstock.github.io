@@ -45,7 +45,7 @@
 </url>
 <url>
     <loc>https://michielstock.github.io/blog/index.html</loc>
-    <lastmod>2023-09-20</lastmod>
+    <lastmod>2023-10-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -135,13 +135,19 @@
 </url>
 <url>
     <loc>https://michielstock.github.io/CV/index.html</loc>
-    <lastmod>2022-02-02</lastmod>
+    <lastmod>2023-09-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://michielstock.github.io/posts/2022/2022-08-31-minder/index.html</loc>
     <lastmod>2022-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2023/2023-10-07-ModSim-python/index.html</loc>
+    <lastmod>2023-10-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
