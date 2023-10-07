@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  Thinking in Systems: A Primer  ]]>
+  </title>
+  <link> https://michielstock.github.io/posts/2023/2023-09-20-thinking_in_systems/index.html </link>
+  <guid> https://michielstock.github.io/posts/2023/2023-09-20-thinking_in_systems/index.html </guid>
+  <description>
+    <![CDATA[  Thinking in Systems is a classical work that introduces systems theory in an accessible way.  ]]>
+  </description>  
+    
+  <pubDate>Wed, 20 Sep 2023 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Michiel Stock</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  Newton fractal in Julia using Symbolics.jl  ]]>
   </title>
   <link> https://michielstock.github.io/posts/2021/2021-10-17-fractal/index.html </link>
