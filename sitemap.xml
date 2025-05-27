@@ -284,6 +284,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://michielstock.github.io/posts/2025/WoS/</loc>
+    <lastmod>2025-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://michielstock.github.io/pluto/SPNs/</loc>
     <lastmod>2025-05-27</lastmod>
     <changefreq>monthly</changefreq>
