@@ -111,7 +111,7 @@ Z100 &#61; applyiteratively.&#40;Z0, update&#41;;</code></pre><pre><code class="
 <p>This results in a large complex matrix. We might define a colourmap for complex numbers as done <a href="https://vqm.uni-graz.at/pages/colormap.html">here</a>, though plotting the angle of the complex number in polar coordinates suffices.</p>
 <pre><code class="language-julia">using Plots
 
-heatmap&#40;angle.&#40;Z100&#41;, colorbar&#61;false, color&#61;:rainbow, ticks&#61;false&#41;</code></pre><pre><code class="plaintext code-output">Failed to precompile Plots [91a5bcdd-55d7-5caf-9e0b-520d859cae80] to "/Users/michielstock/.julia/compiled/v1.9/Plots/jl_VlYjhH".
+heatmap&#40;angle.&#40;Z100&#41;, colorbar&#61;false, color&#61;:rainbow, ticks&#61;false&#41;</code></pre><pre><code class="plaintext code-output">UndefVarError: `Z100` not defined
 </code></pre>
 <img src="/assets/posts/2021/2021-10-17-fractal/code/output/fractal.png" alt="">
 <p>Below are some other examples.</p>
