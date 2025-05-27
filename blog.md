@@ -18,6 +18,10 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 ## Posts by year
 
+### 2025
+
+[Walk on Spheres](/posts/2025/WoS/)
+
 ### 2023
 
 [📚Thinking in Systems: A Primer](/posts/2023/2023-09-20-thinking_in_systems/)
