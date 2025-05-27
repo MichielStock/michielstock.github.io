@@ -20,7 +20,7 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 ### 2025
 
-[Walk on Spheres](/posts/2025/WoS/)
+[Walk on Spheres algoritm](/posts/2025/WoS/)
 
 ### 2023
 
