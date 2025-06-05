@@ -1,24 +1,28 @@
 +++
 title = "Research"
 hascode = false
-date = Date(2021, 05, 10)
+date = Date(2025, 06, 5)
 +++
 
+# Research mission
 
-# Research overview
 
-> Developing computational methods to model and design complex biosystems.
+I am co-leading the [KERMIT](https://kermit.ugent.be/index.php) research unit together with Bernard De Baets, where I am responsible for the computational modelling research line. KERMIT’s mission is to harness **mathematics** and **computation** to unravel life's complexities, optimize biological functions, and drive innovation in biodesign and decision-making under uncertainty. Focused on **applied biological sciences**—including biotechnology, environmental technology, plant breeding and food technology—, KERMIT refines existing methods and develops cutting-edge approaches across disciplines. The team is committed to creating **accessible software tools** that transform data streams into actionable and interpretable insights. Valuing continuous learning, interdisciplinary collaboration, and mental well-being, KERMIT embraces a **holistic approach** to solving challenges in our data-driven, interconnected world.
 
-In bioengineering, most systems consist of smaller modules: ecosystems consist of species, a proteins can be designed from building blocks, a cocktail is a combination of mixers. In most cases, we don't really know how the parts interact and from a good design. The solution is to start from experiments or naturally occurring variants and see what we can learn from them.
+![](https://i.ibb.co/WWXV0hbJ/poster-KERMIT-Compmod.png)
 
-In my research, I mainly deal with either *combinatorial systems*, where the question is which building blocks to select and how to connect them, and *compositional systems*, where one wants to determine the relative quantities of the modules. An example of the former is when one wants to pick bacteria for a biodegrading co-culture, while the latter would involve the bacteria's initial relative abundances. Key to these problems is that one typically has some kind of description or similarity over the building block one wants to exploit.
+In our subgroup, we specifically focus on non-conventional computing for understanding biological systems, including stochastic and differential programming, evolutionary computing, and other related approaches. Though we have an interest in various application fields within the applied biological sciences, we have plant growth and synthetic biology as our key focuses.
 
-![Combinatorial and compositional problems.](../images/comb_comp.png)
+## Key visionary publications
 
-Tackling these problems usually involve a combination of *learning*, *optimization* and *sampling*. Learning involves fitting predictive models to understand designs. Optimization allows us to develop the next best design to test, while sampling acknowledges the inherent uncertainty in biological systems. I am fond of methods that one can be implement in a few lines of code (my PhD was about kernel methods). Most of the fun is discovering a new application or modification for an existing algorithm to find a wholly new use.
+**[Hyperdimensional computing: a fast, robust and interpretable paradigm for biological data](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012426)**  
+M. Stock, W. Van Criekinge, D. Boeckaerts, P. Dewulf, S. Taelman, M. Van Haeverbeke and B. De Baets  
+(2024) PLOS COMPUTATIONAL BIOLOGY. 20, e1012426
 
-![Different methods of interest.](../images/methods_triangle.png)
+**https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2023.1299208/full**  
+M. Stock, O. Pieters, T. De Swaef and F. wyffels  
+(2024) FRONTIERS IN PLANT SCIENCE. 14, 1299208.
 
-As part of the faculty of bioscience engineering, I work together with various people on applications in life science. My main interest is in community ecology, microbiomes and synthetic biology, though I always keep my eyes open for food-related ideas for hobby projects. Currently, I guide five PhD students. Two are working on methodological techniques; three are working on applications: [designer phages](https://ciliblog.github.io/), biofilm detection and microbiome engineering.
-
-In research, personal or when working with others, I value learning and trying new things, creativity and collaboration as key principles.
+**[Open-endedness in synthetic biology: A route to continual innovation for biological design](https://www.science.org/doi/10.1126/sciadv.adi3621)**  
+M. Stock and T. E. Gorochowski  
+(2024) SCIENCE ADVANCES. 10, eadi3621.

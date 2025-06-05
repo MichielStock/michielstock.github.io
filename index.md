@@ -2,13 +2,8 @@
 
 # Maximum Entropy
 
-Hi, I am Michiel Stock, a postdoctoral researcher at Ghent University.
-I am interested in applying computational intelligence to modelling and engineering in the life sciences.
-During my PhD, I worked on kernel-based methods to model interactions.
-Afterwards, I spend a couple of years on modelling species interaction networks.
-Now, my main focus is on stochastical modelling and operations research for synthetic biology.
-
-In my spare time, I enjoy reading, running, and boardgames. I am also following training to become a chef.
+Hi, I am Michiel Stock, a assistant professor at Ghent University, Faculty of Bioscience engineering.
+I am interested in applying computational intelligence to modelling and engineering in the life sciences. 
 
 ![](images/me.JPG)
 

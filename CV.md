@@ -12,7 +12,8 @@ I am currently an assistant professor at the KERMIT (knowledge-based systems) an
 
 ## Education and work experience
 
-- **2020-present**: doctoral assistant Ghent University
+- **2024-present**: assistant professor Ghent University (applied dynamical systems)
+- **2020-2024**: doctoral assistant Ghent University
   - topic: computational intelligence for synthetic biology
 - **2020-2021**: 10% bioinformatics and machine learning consultant for BioLizard
 - **2017-2020**: FWO postdoc
@@ -27,6 +28,8 @@ I am currently an assistant professor at the KERMIT (knowledge-based systems) an
 ## Teaching experience
 
 As a lecturer:
+- Differential Equations
+- 
 - [*Selected Topics in Mathematical Optimization*](https://github.com/MichielStock/STMO)
 - *Experimental Design*
 
