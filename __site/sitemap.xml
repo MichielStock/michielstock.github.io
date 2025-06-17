@@ -45,7 +45,7 @@
 </url>
 <url>
     <loc>https://michielstock.github.io/blog/index.html</loc>
-    <lastmod>2025-05-27</lastmod>
+    <lastmod>2025-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -280,6 +280,12 @@
 <url>
     <loc>https://michielstock.github.io/posts/2022/2022-06-16-SPNs/</loc>
     <lastmod>2022-06-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://michielstock.github.io/posts/2025/pendulums/</loc>
+    <lastmod>2025-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>

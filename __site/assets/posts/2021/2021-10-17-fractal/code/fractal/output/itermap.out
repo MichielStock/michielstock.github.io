@@ -1,1 +1,3 @@
-UndefVarError: `update` not defined
+UndefVarError: `update` not defined in `Main.FD_SANDBOX_918231692816147649`
+Suggestion: check for spelling errors or missing imports.
+Hint: a global variable of this name may be made accessible by importing Pkg in the current active module Main
