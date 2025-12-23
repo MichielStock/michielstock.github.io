@@ -20,6 +20,8 @@ I am hosting here a small blog, updated once every blue moon. Most of my posts c
 
 ### 2025
 
+[📚Algorithmic Information Dynamics](/posts/2025/2025-12-23-AID/)
+
 [Lagrangian Mechanics in MTK.jl](/posts/2025/pendulums/)
 
 [Walk on Spheres Algoritm](/posts/2025/WoS/)
