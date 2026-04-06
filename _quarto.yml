@@ -67,6 +67,8 @@ format:
     monofont: "JetBrains Mono, Fira Code, monospace"
     fontsize: "1.05rem"
     linestretch: 1.6
+    include-after-body:
+      text: '<script data-goatcounter="https://michielstock.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>'
 
 execute:
   freeze: auto
