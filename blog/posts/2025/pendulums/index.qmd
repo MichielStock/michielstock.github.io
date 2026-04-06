@@ -1,0 +1,13 @@
+---
+title: "Lagrangian Mechanics in MTK.jl"
+date: 2025-06-17
+categories: [julia, maths]
+description: "Modelling pendulum systems using Lagrangian mechanics and ModelingToolkit.jl."
+aliases:
+  - "/posts/2025/pendulums/"
+freeze: true
+---
+
+This post is a [Pluto.jl](https://plutojl.org/) notebook exploring Lagrangian mechanics applied to pendulum systems, using [ModelingToolkit.jl](https://github.com/SciML/ModelingToolkit.jl).
+
+[View the interactive notebook](notebook.html){.btn .btn-primary}

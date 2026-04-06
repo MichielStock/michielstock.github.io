@@ -1,0 +1,13 @@
+---
+title: "Hyperdimensional computing"
+date: 2022-10-04
+categories: [julia, computing]
+description: "A hands-on tutorial on hyperdimensional computing — encoding, bundling, binding, and classification with high-dimensional vectors."
+aliases:
+  - "/posts/2022/2022-10-04-HDVtutorial/"
+freeze: true
+---
+
+This post is a [Pluto.jl](https://plutojl.org/) notebook providing a hands-on tutorial on hyperdimensional computing. It covers the core operations (bundling, binding, permutation) and builds up to a simple text classifier.
+
+[View the interactive notebook](notebook.html){.btn .btn-primary}

@@ -1,0 +1,20 @@
+---
+title: "Blog"
+subtitle: "Updated once every blue moon. Topics include data science, mathematics, computing, book reviews, and the occasional opinion."
+listing:
+  - id: blog-listing
+    contents: posts
+    sort: "date desc"
+    type: default
+    categories: true
+    feed:
+      title: "Maximum Entropy"
+      description: "Blog by Michiel Stock on data science, mathematics, computing, and books."
+    fields: [title, date, categories, description]
+    filter-ui: true
+    sort-ui: true
+    page-size: 15
+---
+
+:::{#blog-listing}
+:::

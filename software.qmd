@@ -1,0 +1,109 @@
+---
+title: "Software"
+toc: true
+---
+
+I contribute to several open-source projects, primarily in the Julia ecosystem.
+
+## Hyperdimensional computing
+
+::: {.card}
+### [HyperdimensionalComputing.jl](https://github.com/MichielStock/HyperdimensionalComputing.jl)
+
+A Julia implementation of hyperdimensional computing (HDC), also known as vector-symbolic architectures. Provides the core operations — bundling, binding, and permutation — on high-dimensional binary and bipolar vectors for fast, interpretable classification and reasoning over structured data.
+
+[GitHub](https://github.com/MichielStock/HyperdimensionalComputing.jl)
+:::
+
+::: {.card}
+### [HDC tutorial](https://github.com/Kermit-UGent/HDC_tutorial)
+
+An accessible, hands-on introduction to hyperdimensional computing and vector-symbolic architectures, developed for workshops and courses at KERMIT. Covers encoding, similarity search, classification, and analogical reasoning with worked examples.
+
+[GitHub](https://github.com/Kermit-UGent/HDC_tutorial)
+:::
+
+## Plant modelling & impedance spectroscopy
+
+::: {.card}
+### [PlantModules.jl](https://github.com/bspanoghe/PlantModules.jl)
+
+A Julia package for building modular, hydraulic plant models. Allows researchers to compose plant systems from reusable physiological modules and simulate water transport, growth, and environmental responses. Developed with Tom De Swaef and Bram Spanoghe.
+
+[GitHub](https://github.com/bspanoghe/PlantModules.jl)
+:::
+
+::: {.card}
+### [EquivalentCircuits.jl](https://github.com/MaximeVH/EquivalentCircuits.jl)
+
+Fit equivalent electrical circuit models to electrochemical impedance spectroscopy (EIS) data, or discover plausible circuit topologies automatically using gene expression programming. Used in our work on plant impedance spectroscopy and biofilm characterisation. Developed by Maxime Van Haeverbeke.
+
+[GitHub](https://github.com/MaximeVH/EquivalentCircuits.jl) ·
+[Paper (IEEE TIM)](https://doi.org/10.1109/TIM.2021.3113116)
+:::
+
+::: {.card}
+### [DistributedRelaxationTimes.jl](https://github.com/MaximeVH/DistributedRelaxationTimes.jl)
+
+Implements the Distribution of Relaxation Times (DRT) method for analysing impedance spectra without assuming a circuit model. A complementary approach to EquivalentCircuits.jl, useful for exploratory analysis of complex electrochemical and biological systems. Developed by Maxime Van Haeverbeke.
+
+[GitHub](https://github.com/MaximeVH/DistributedRelaxationTimes.jl)
+:::
+
+## Phage biology
+
+::: {.card}
+### [PhaLP — Phage Lytic Protein database](https://phalp.ugent.be/)
+
+A curated database of phage lytic proteins (enzybiotics) — enzymes from bacteriophages that degrade bacterial cell walls. PhaLP provides sequence data, domain annotations, host information, and 3D structures to support the development of next-generation antibacterials. A collaboration with the Briers lab.
+
+[Website](https://phalp.ugent.be/) ·
+[Paper (Viruses)](https://doi.org/10.3390/v13071240)
+:::
+
+## Mathematical optimization & linear algebra
+
+::: {.card}
+### [Kronecker.jl](https://github.com/MichielStock/Kronecker.jl)
+
+A general-purpose toolbox for efficient Kronecker-based algebra. Exploits the structure of Kronecker products to perform matrix operations — determinants, inverses, eigendecompositions — without ever forming the full matrix. Used in pairwise learning and kernel methods.
+
+[GitHub](https://github.com/MichielStock/Kronecker.jl) ·
+[Documentation](https://michielstock.github.io/Kronecker.jl/)
+:::
+
+::: {.card}
+### [DiffDynProg.jl](https://github.com/MichielStock/DiffDynProg.jl)
+
+Differentiable dynamic programming — computing gradients through dynamic programming algorithms for integration into machine learning pipelines. Enables end-to-end learning with alignment and shortest-path problems.
+
+[GitHub](https://github.com/MichielStock/DiffDynProg.jl)
+:::
+
+## Teaching materials
+
+::: {.card}
+### [STMO — Selected Topics in Mathematical Optimization](https://michielstock.github.io/STMO/)
+
+A full course on numerical optimization implemented in Julia with Pluto notebooks. Covers gradient descent, convex optimization, stochastic methods, and more. Used in the MSc Bioinformatics programme at Ghent University.
+
+[GitHub](https://github.com/MichielStock/STMO) ·
+[Website](https://michielstock.github.io/STMO/)
+:::
+
+::: {.card}
+### [Modelling and Simulation](https://kermit-ugent.github.io/ModSim/)
+
+Course website for the BSc Bioscience Engineering course. Covers ODEs, SDEs, Monte Carlo, MCMC, Bayesian reasoning, calibration, and model selection.
+
+[Website](https://kermit-ugent.github.io/ModSim/)
+:::
+
+::: {.card}
+### [DS-Julia2925](https://beramos.github.io/DS-Julia2925/)
+
+Materials for the annual three-day Julia Doctoral School, co-taught with colleagues. An intensive introduction to Julia for scientific computing.
+
+[GitHub](https://github.com/beramos/DS-Julia2925) ·
+[Website](https://beramos.github.io/DS-Julia2925/)
+:::

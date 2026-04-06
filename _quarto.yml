@@ -1,0 +1,73 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - "*.qmd"
+    - "blog/"
+
+website:
+  title: "Maximum Entropy"
+  description: "Michiel Stock — Assistant Professor at Ghent University. Computational intelligence for modelling and engineering in the life sciences."
+  site-url: https://michielstock.github.io
+  favicon: images/favicon.svg
+
+  navbar:
+    background: dark
+    foreground: light
+    title: "Maximum Entropy"
+    left:
+      - text: Home
+        href: index.qmd
+      - text: About
+        href: about.qmd
+      - text: Research
+        href: research.qmd
+      - text: Teaching
+        href: teaching.qmd
+      - text: Blog
+        href: blog/index.qmd
+      - text: Software
+        href: software.qmd
+    right:
+      - icon: github
+        href: https://github.com/MichielStock
+      - icon: mortarboard-fill
+        href: https://scholar.google.be/citations?user=qR_LXM8AAAAJ
+      - icon: envelope
+        href: mailto:michiel.stock@ugent.be
+      - icon: rss
+        href: blog/index.xml
+
+  search:
+    location: navbar
+    type: overlay
+
+  page-footer:
+    left: "© 2017–2026 Michiel Stock"
+    center: "Built with [Quarto](https://quarto.org) and [Julia](https://julialang.org)"
+    right:
+      - icon: github
+        href: https://github.com/MichielStock
+      - icon: mortarboard-fill
+        href: https://scholar.google.be/citations?user=qR_LXM8AAAAJ
+
+  open-graph: true
+
+format:
+  html:
+    theme:
+      light: [flatly, styles/custom.scss]
+      dark: [darkly, styles/custom.scss]
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+    highlight-style: github
+    mainfont: "Source Serif 4, Georgia, serif"
+    monofont: "JetBrains Mono, Fira Code, monospace"
+    fontsize: "1.05rem"
+    linestretch: 1.6
+
+execute:
+  freeze: auto
+  warning: false

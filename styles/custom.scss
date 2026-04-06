@@ -1,0 +1,350 @@
+/*-- scss:defaults --*/
+
+// === Deep Ocean Color Palette ===
+$primary:       #1B3A4B;    // Deep navy
+$secondary:     #3D6B7E;    // Steel blue
+$success:       #3D7A5F;    // Sea green
+$info:          #7EB8C9;    // Light blue
+$warning:       #D4A84B;    // Warm gold
+$danger:        #C4563D;    // Muted coral
+
+$body-bg:       #F4F6F7;    // Cool off-white
+$body-color:    #1A2A33;    // Near-black with blue undertone
+$link-color:    #1B3A4B;
+$link-hover-color: #3D6B7E;
+
+$font-family-sans-serif: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+$font-family-serif:      "Source Serif 4", Georgia, "Times New Roman", serif;
+$font-family-monospace:  "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+$headings-font-family:   "Source Sans 3", sans-serif;
+$headings-font-weight:   600;
+$headings-color:         #1B3A4B;
+
+$spacer: 1.25rem;
+$border-radius: 0.375rem;
+$code-bg: #EDF1F3;
+
+/*-- scss:rules --*/
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+body {
+  font-family: $font-family-serif;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $headings-font-family;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  border-bottom: 3px solid $primary;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+h2 {
+  font-size: 1.6rem;
+  margin-top: 2.5rem;
+  color: $primary;
+}
+
+// --- Navigation ---
+.navbar {
+  font-family: $font-family-sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  background-color: #141E24 !important;
+  border-bottom: 2px solid rgba($warning, 0.3);
+
+  .navbar-brand {
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: -0.03em;
+  }
+}
+
+// --- Hero section (Home page) ---
+.hero-section {
+  padding: 3rem 0;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.hero-image {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid $warning;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.hero-text {
+  flex: 1;
+  min-width: 280px;
+
+  h1 {
+    border-bottom: none;
+    font-size: 2.6rem;
+    margin-bottom: 0.3rem;
+    display: block;
+  }
+
+  .subtitle {
+    font-size: 1.15rem;
+    color: $secondary;
+    font-family: $font-family-sans-serif;
+    margin-bottom: 1rem;
+  }
+}
+
+.hero-links {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 2rem;
+    font-size: 0.9rem;
+    font-family: $font-family-sans-serif;
+    text-decoration: none;
+    border: 1.5px solid rgba($primary, 0.3);
+    color: $primary;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $primary;
+      color: white;
+      border-color: $primary;
+    }
+  }
+}
+
+// --- Cards ---
+.card {
+  border: 1px solid #D8DEE2;
+  border-radius: $border-radius;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  background: white;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+
+  h3 {
+    font-size: 1.15rem;
+    margin-top: 0;
+    margin-bottom: 0.4rem;
+  }
+}
+
+// --- Publication cards ---
+.pub-card {
+  border-left: 3px solid $primary;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+
+  .pub-card-inner {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .pub-thumb {
+    width: 100px;
+    height: 100px;
+    border-radius: 6px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .pub-card-text {
+    flex: 1;
+  }
+
+  .pub-title {
+    font-weight: 600;
+    font-family: $headings-font-family;
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .pub-authors {
+    font-size: 0.9rem;
+    color: #5A6A73;
+  }
+
+  .pub-venue {
+    font-style: italic;
+    font-size: 0.9rem;
+    color: $info;
+    margin-bottom: 0.4rem;
+  }
+
+  .pub-links a {
+    font-size: 0.8rem;
+    margin-right: 0.75rem;
+    font-family: $font-family-sans-serif;
+  }
+}
+
+// --- Timeline ---
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+  border-left: 2px solid $primary;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: -2.55rem;
+    top: 0.35rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: $primary;
+    border: 2px solid $body-bg;
+  }
+}
+
+.timeline-date {
+  font-family: $font-family-sans-serif;
+  font-size: 0.85rem;
+  color: $secondary;
+  font-weight: 600;
+}
+
+// --- Tags ---
+.tag {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-family: $font-family-sans-serif;
+  background: rgba($primary, 0.12);
+  color: $primary;
+  text-decoration: none;
+
+  &:hover {
+    background: rgba($primary, 0.2);
+  }
+}
+
+// --- Footer ---
+.nav-footer {
+  font-family: $font-family-sans-serif;
+  font-size: 0.85rem;
+  border-top: 2px solid rgba($primary, 0.2);
+  margin-top: 3rem;
+  padding-top: 1rem;
+}
+
+// --- Math ---
+.math-display {
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+// --- Responsive ---
+@media (max-width: 768px) {
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-links {
+    justify-content: center;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+}
+
+// --- Dark mode ---
+[data-bs-theme="dark"] {
+  --bs-body-bg: #141E24;
+  --bs-body-color: #D8DEE2;
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #E4ECF0;
+  }
+
+  h1 {
+    border-bottom-color: #7EB8C9;
+  }
+
+  h2 {
+    color: #7EB8C9;
+  }
+
+  .card {
+    background: #1C2830;
+    border-color: #2A3E4A;
+  }
+
+  .pub-card {
+    border-left-color: #7EB8C9;
+  }
+
+  .pub-authors {
+    color: #8A9BA5;
+  }
+
+  .hero-image {
+    border-color: $warning;
+  }
+
+  .tag {
+    background: rgba(#7EB8C9, 0.2);
+    color: #7EB8C9;
+  }
+
+  .timeline {
+    border-left-color: #7EB8C9;
+  }
+
+  .timeline-item::before {
+    background: #7EB8C9;
+    border-color: #141E24;
+  }
+
+  .navbar {
+    border-bottom-color: rgba($warning, 0.3);
+  }
+
+  .hero-links a {
+    border-color: rgba(#7EB8C9, 0.3);
+    color: #7EB8C9;
+
+    &:hover {
+      background: #7EB8C9;
+      color: #141E24;
+      border-color: #7EB8C9;
+    }
+  }
+
+  .nav-footer {
+    border-top-color: rgba(#7EB8C9, 0.2);
+  }
+}

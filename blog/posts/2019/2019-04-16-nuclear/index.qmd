@@ -1,0 +1,208 @@
+---
+title: "On recovering matrices"
+date: 2019-04-16
+categories: [computing, maths, datascience]
+aliases:
+  - "/posts/2019/nuclear/"
+freeze: true
+---
+
+![Photo by brandy turner on Unsplash.](brandy-turner-517339-unsplash.jpg)
+
+Most of my research is focused on predicting matrix-valued data ('pairwise learning'). This works by either having features of the rows and columns or by exploiting some kind of structure in the matrix. One particularly appealing type of structure is that a matrix $X$ is low rank, i.e.
+
+$$
+X \approx UV^\intercal\,,
+$$
+
+where both $U$ and $V$ are 'long': they have many rows but few columns. Many large matrices can be modelled as such, since it is assumed that there are only a couple of hidden variables that explain the data. This principle is widely used in unsupervised learning (factorization methods such as PCA and the like) and can be exploited to, for example, find the [topmost relevant items efficiently](https://link.springer.com/article/10.1007/s10618-016-0456-z).
+
+One way to find low-rank matrices is by adding the nuclear norm as a matrix regularizer. This could recover a low-rank matrix. Only very recently it finally clicked in my mind how this works. This post is a small technical note on how to use empirical risk minimization to recover matrices, with an emphasis low-rank and positive semi-definite ones. As an illustration, I will show that with some straightforward code, we can obtain a better estimate of a correlation matrix. The Jupyter notebook of this post can be found on my [Github](https://github.com/MichielStock/Teaching/blob/master/Nuclearnorm/nuclear_norm.ipynb).
+
+## Recovering matrices
+
+Suppose we have matrix $Y$ of observations, for example user-item ratings, interaction values between drugs and protein targets, or the adjacency matrix of a food web. If we expect that the values of $Y$ are corrupted or if $Y$ is incomplete, we need to re-estimate $Y$ by a hopefully better matrix $X$. In machine learning, such problems are approached by solving an *empirical risk minimization problem* (ERMP):
+
+$$
+\min_X l(Y, X) +\lambda \cdot h(X)\,.
+$$
+
+This optimization problem has typically three parts:
+
+- a *loss function* $l(\cdot, \cdot)$ which quantifies how well the matrix $X$ approximates our observed matrix $Y$;
+- a *regularization function* $h(\cdot)$, which we can use to impose some structure on the matrix $X$;
+- a *regularization parameter* $\lambda$, a dial to adjust the relative trade-off between the two terms above.
+
+For the loss function, there are plenty of options, depending on the nature of the data (regression, classification, many outliers...). We will just focus on the vanilla squared loss:
+
+$$
+l(Y, X) = \sum_{i,j}(Y_{ij}-X_{ij})^2\,,
+$$
+
+which is most appropriate if the elements of $Y$ are real-valued and meausurement errors are close to normally distributed. Note that if not all the values of $Y$ are observed, we can trivially deal with this by just taking the sum only over the values that are sampled.
+
+If we only minimize a loss, we will just obtain a matrix $X$ with exactly the same content as $Y$, not particularly exciting! The magic of the regularizer is that it will impose some structure on the learnt matrix $X$. The most basic assumption we can make is that the values of $X$ should not be 'too large', which can be enforced by $L_2$: regularization:
+
+$$
+h_{L_2}(X) = \sum_{i,j} X_{ij}^2\,.
+$$
+
+The $L_2$ norm ensures that no value in $X$ can grow too large, as the penalty is proportional to the squared value. The nice thing about this, if that in conjunction with the squared loss, the empirical risk minimization problem yields a closed-form solution.
+
+A popular alternative to $L_2$ regularization is by using $L_1$-norm instead:
+
+$$
+h_{L_1}(X) = \sum_{i,j} |X_{ij}|\,.
+$$
+
+The $L_1$ norm enforces *sparsity*: many of the values in $X$ will be driven to zero. Additionally, the $L_1$,  regulalizer, in contrast to $L_2$, is also more tolerant to having some larger values in $X$ (linear vs. quadratic penalty).
+
+What if, rather than having some demands on the individual values of $X$, we want this matrix to be 'simple' in a more global way? One way how $X$ can be simple, is by searching for an $X$ with a low rank, i.e. one that can be represented by a few dimensions. Is there a simple way to guide $X$ towards having a low rank? Yes! This can be done by considering the nuclear norm:
+
+$$
+||X||_\star = \sqrt{\text{tr}(X^\intercal X)}\,,
+$$
+
+which leads to a regularizer:
+
+$$
+h_\text{nucl}(X) = \text{tr}(X^\intercal X)\,.
+$$
+
+So the trace (taking the sum of the diagonal values of a matrix) apparently holds the key to finding low-rank matrices. The reason is quite an interesting exercise in linear algebra. Note that the [singular value decompostion](https://en.wikipedia.org/wiki/Singular_value_decomposition) of $X$ is written as:
+
+$$
+X = \sum_k\sigma_k\mathbf{u}_k\mathbf{v}^\intercal_k\,,
+$$
+
+with $\mathbf{u}_1, \mathbf{u}_2,\ldots$ and $\mathbf{v}_1, \mathbf{v}_2,\ldots$ two sets of orthonormal eigenvectors and $\sigma_1, \sigma_2,\ldots$ the eigenvalues of $X^\intercal X$. If $X$ is low rank, this means that many of these eigenvalues are zero. Note that these eigenvalues are all non-negative reals if $X$ is a real-valued matrix. The trace of a matrix is equal to the sum of its eigenvalues, hence we can write
+
+$$
+\text{tr}(X^\intercal X) = \sum_k \sigma_k = \sum_k |\sigma_k|\,.
+$$
+
+This means that the trace will place an $L_2$ regularization on the eigenvalues. Large values of the regularization parameter $\lambda$ will drive many of the eigenvalues to zero, ensuring that $X$ will be low rank ([^UV]).
+
+## Illustration: approximating a covariance matrix
+
+Let us illustrate this on a related problem: re-estimating a covariance matrix ([^kernel]). Similar to the ERMP of above, we have a covariance matrix $\Sigma$ which we want to approximate by a matrix $S$ (for example because $\Sigma$ is subjected to high variance during estimation). The problem becomes:
+
+$$
+\min_{S\succeq 0} l(\Sigma, S) + \lambda \cdot h(S)\,.
+$$
+
+We restrict ourselves to searching in the [positive semi-definite](https://en.wikipedia.org/wiki/Definiteness_of_a_matrix) (PSD) cone ($S\succeq 0$). Since covariance matrices are PSD, all eigenvalues are non-zero.
+
+We will try this out on the [wines dataset](https://archive.ics.uci.edu/ml/datasets/wine), a small dataset containing 13 chemical and physical characteristics of several wines. We will first compute the covariance matrix and subsequently re-estimate this matrix, penalizing the $L_2$-, $L_1$ and nuclear norm.
+
+```julia
+wines = CSV.read("wines.csv")
+variables = String.(names(wines))
+describe(wines)
+```
+
+We use $\Sigma$ to denote the unbiased estimator of the covariance.
+
+```julia
+# convert DataFrame to Matrix
+X = convert(Matrix, wines)
+Σ = cov(X)
+```
+
+We will use a [simple gradient descent](https://michielstock.github.io/ConvexSummary/) to solve the ERMP. During the gradient updates, it is possible that $S$ is no longer positive semi-definite. For this reason, we will have to project back in the positive semi-definite cone in every step. This can be done by setting negative eigenvalues to zero.
+
+```julia
+function projectSPDcone!(S)
+    vals, vectors = eigen(S)
+    vals[vals .< 0.0] .= 0.0
+    S .= vectors * Diagonal(vals) * vectors'
+    return S
+end
+```
+
+Similarly, we can use soft-thresholding to set very small values to zero. This is an easy way to make sparse solutions possible.
+
+```julia
+function softthreshold!(X, tol::Real=1e-4)
+    X[abs.(X) .< tol] .= 0.0
+end
+```
+
+We also need the gradient of loss and regularization functions. These can be computed using automatic differentiation methods, but since the functions are so simple, let's provide them explicitly:
+
+```julia
+∇ls(Y, X) = 2(X .- Y)
+```
+
+```julia
+∇L₂(X) = 2X
+∇L₁(X) = sign.(X)
+∇nucl(S) = sign.(Diagonal(S))
+```
+
+Note that here the nuclear regularization is directly on the matrix, since it is already symmetric and PSD.
+
+Putting this all together, we have obtain a general gradient descent function to approximate PSD matrices.
+
+```julia
+function PSDapprox(Σ::AbstractArray, ∇norm::Function, ∇loss=∇ls;
+                λ=1.0, stepsize=1e-3, maxitter=20_000, tol=1e-4)
+    S = copy(Σ)
+    ΔS = similar(S)
+    for i in 1:maxitter
+        # compute gradient of loss + norm
+        ΔS .= ∇ls(Σ, S) + λ * ∇norm(S)
+        # stop if the gradient is small
+        if norm(ΔS) < tol
+            break
+        end
+        S -= stepsize * ΔS
+        # project back into the SPD cone
+        S .= projectSPDcone!(S)
+        # soft thresholding
+        softthreshold!(S, tol)
+    end
+    S
+end
+```
+
+Let us try for the different regularizers:
+
+```julia
+SL₂ = PSDapprox(Σ, ∇L₂, λ=2e-1)
+SL₁ = PSDapprox(Σ, ∇L₁, λ=2e-1)
+Snucl = PSDapprox(Σ, ∇nucl, λ=2e-1)
+```
+
+If these matrices are compared with the original matrix $\Sigma$, you notice that the values have been shrunken by the regularization: we sacrifice unbiasedness for a large drop in variance! As promised, the covariance matrix obtained by using $L_1$ regularization is quite sparse.
+
+```
+sparsity SL₂: 0.0
+sparsity SL₁: 0.26
+sparsity Snucl: 0.01
+```
+
+A look at the spectrum of all matrices shows that the nuclear norm results in low-rank matrices.
+
+![Comparison of the spectra of the different covariance matrices.](spectrum.png)
+
+Checking the rank explicitly:
+
+```
+rank Σ: 13
+rank SL₂: 13
+rank SL₁: 12
+rank Snucl: 8
+```
+
+As claimed.
+
+## Conclusion
+
+Many machine learning problems can be posed as trying to recover a matrix (e.g. edge prediction in a network, collaborative filtering, image inpainting...). Empirical risk minimization is a general framework to think about such problems, where the regularization penalty can be used to impose some structure on the learned matrix.
+
+**Footnotes**
+
+[^UV]: You might wonder why not simply reformulate the problem by substituting $X$ by $UV^\intercal$ and minimize the objective w.r.t. $U$ and $V$. In this case, the problem is no longer convex and has no longer an unique solution (swapping any corresponding of $U$ and the corresponding ones in $V$ yields the same objective value). The optimization problem will no longer have a single minimum is is thus harder to solve.
+
+[^kernel]: A related problem would be kernel learning, where the goal is to find a good [kernel](https://en.wikipedia.org/wiki/Kernel_method) matrix describing the data.

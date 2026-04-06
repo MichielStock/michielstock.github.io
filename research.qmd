@@ -1,0 +1,171 @@
+---
+title: "Research"
+toc: true
+aliases:
+  - /research/
+---
+
+## Research Mission
+
+I co-lead the [KERMIT](https://kermit.ugent.be/) research unit together with
+Bernard De Baets, where I am responsible for the computational modelling
+research line. KERMIT's mission is to harness mathematics and computation to
+unravel life's complexities, optimize biological functions, and drive
+innovation in biodesign and decision-making under uncertainty.
+
+In our subgroup, we focus on non-conventional computing for understanding
+biological systems, including stochastic and differential programming,
+evolutionary computing, and other related approaches. Though we have an
+interest in various application fields within the applied biological sciences,
+we have **plant growth** and **synthetic biology** as our key focuses.
+
+![Computational Modelling at KERMIT](images/kermit-compmod.png){fig-alt="Poster showing computational modelling research at KERMIT" width="100%"}
+
+## Research Themes
+
+### Computational Modelling for Synthetic Biology
+
+We develop AI-driven methods to design and optimize biological parts and
+systems. This includes predicting promoter strength, designing proteins,
+and exploring the open-ended nature of biological innovation.
+
+### Machine Learning for Ecological Networks
+
+Using optimal transportation theory and maximum entropy principles, we model
+how species interact in ecological networks — predicting pollination,
+host-parasite, and food web patterns.
+
+### Hyperdimensional Computing for Biological Data
+
+We pioneer the use of hyperdimensional computing as a fast, robust, and
+interpretable paradigm for analyzing biological sequences, molecular data,
+and ecological patterns.
+
+### Plant Growth Modelling
+
+Combining differential equations, sensor data, and machine learning to model
+and predict plant growth dynamics under varying environmental conditions.
+
+### Quality-Diversity & Evolutionary Algorithms
+
+We adapt quality-diversity algorithms from evolutionary computation to discover
+diverse, high-performing solutions in biological design and optimization problems.
+
+## Key Publications
+
+::: {.pub-card}
+:::: {.pub-card-inner}
+![](images/pub-openended.png){.pub-thumb}
+
+::::: {.pub-card-text}
+[**Open-endedness in synthetic biology: A route to continual innovation for biological design**]{.pub-title}
+
+[M. Stock, T. E. Gorochowski]{.pub-authors}
+
+[Science Advances, 10, eadi3621 (2024)]{.pub-venue}
+
+::: {.pub-links}
+[Paper](https://www.science.org/doi/10.1126/sciadv.adi3621)
+:::
+:::::
+::::
+:::
+
+::: {.pub-card}
+:::: {.pub-card-inner}
+![](images/pub-hdc.png){.pub-thumb}
+
+::::: {.pub-card-text}
+[**Hyperdimensional computing: a fast, robust and interpretable paradigm for biological data**]{.pub-title}
+
+[M. Stock, W. Van Criekinge, D. Boeckaerts, P. Dewulf, S. Taelman, M. Van Haeverbeke, B. De Baets]{.pub-authors}
+
+[PLOS Computational Biology, 20, e1012426 (2024)]{.pub-venue}
+
+::: {.pub-links}
+[Paper](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012426)
+:::
+:::::
+::::
+:::
+
+::: {.pub-card}
+:::: {.pub-card-inner}
+![](images/pub-qd.png){.pub-thumb}
+
+::::: {.pub-card-text}
+[**Quality-diversity methods for the modern data scientist**]{.pub-title}
+
+[M. Stock, D. Van Hauwermeiren, B. De Baets, S. Taelman, D. Marzougui, M. Van Haeverbeke]{.pub-authors}
+
+[WIREs Computational Statistics, 17, e70047 (2025)]{.pub-venue}
+
+::: {.pub-links}
+[Paper](https://doi.org/10.1002/wics.70047)
+:::
+:::::
+::::
+:::
+
+::: {.pub-card}
+:::: {.pub-card-inner}
+![](images/pub-phage.png){.pub-thumb}
+
+::::: {.pub-card-text}
+[**Prediction of Klebsiella phage-host specificity at the strain level**]{.pub-title}
+
+[D. Boeckaerts, M. Stock, C. Ferriol-González, J. Oteo-Iglesias, R. Sanjuán, P. Domingo-Calap, B. De Baets, Y. Briers]{.pub-authors}
+
+[Nature Communications, 15, 4355 (2024)]{.pub-venue}
+
+::: {.pub-links}
+[Paper](https://doi.org/10.1038/s41467-024-48675-6)
+:::
+:::::
+::::
+:::
+
+::: {.pub-card}
+:::: {.pub-card-inner}
+![](images/pub-ot.png){.pub-thumb}
+
+::::: {.pub-card-text}
+[**Optimal transportation theory for species interaction networks**]{.pub-title}
+
+[M. Stock, T. Poisot, B. De Baets]{.pub-authors}
+
+[Ecology and Evolution, 11, 3841–3855 (2021)]{.pub-venue}
+
+::: {.pub-links}
+[Paper](https://onlinelibrary.wiley.com/doi/abs/10.1002/ece3.7254)
+:::
+:::::
+::::
+:::
+
+::: {.pub-card}
+:::: {.pub-card-inner}
+![](images/pub-plant.png){.pub-thumb}
+
+::::: {.pub-card-text}
+[**Plant science in the age of simulation intelligence**]{.pub-title}
+
+[M. Stock, O. Pieters, T. De Swaef, F. Wyffels]{.pub-authors}
+
+[Frontiers in Plant Science, 14, 1299208 (2024)]{.pub-venue}
+
+::: {.pub-links}
+[Paper](https://www.frontiersin.org/articles/10.3389/fpls.2023.1299208/full)
+:::
+:::::
+::::
+:::
+
+For a complete list, see [Google Scholar](https://scholar.google.be/citations?user=qR_LXM8AAAAJ&hl=en) or the [UGent Academic Bibliography](https://biblio.ugent.be/person/802001370792).
+
+## Open Positions
+
+If you are interested in a PhD or postdoc position in computational modelling
+for biological systems, please [get in touch](mailto:michiel.stock@ugent.be).
+
+I also supervise MSc thesis projects — see the [Teaching](teaching.qmd) page.

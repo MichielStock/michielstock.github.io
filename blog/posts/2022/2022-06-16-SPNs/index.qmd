@@ -1,0 +1,13 @@
+---
+title: "Sum-product networks"
+date: 2022-06-16
+categories: [julia, maths]
+description: "An introduction to sum-product networks — probabilistic models with tractable inference."
+aliases:
+  - "/posts/2022/2022-06-16-SPNs/"
+freeze: true
+---
+
+This post is a [Pluto.jl](https://plutojl.org/) notebook introducing sum-product networks, powerful probabilistic models where marginalization, conditioning, and sampling are all tractable.
+
+[View the interactive notebook](notebook.html){.btn .btn-primary}

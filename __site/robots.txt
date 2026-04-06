@@ -1,4 +1,0 @@
-Sitemap: https://michielstock.github.io/sitemap.xml
-
-User-agent: *
-Disallow:

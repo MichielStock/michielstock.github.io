@@ -1,0 +1,15 @@
+---
+title: "Modelling cocktail shaking"
+date: 2022-04-30
+categories: [julia]
+description: "Using ModelingToolkit.jl to model the thermodynamics of cocktail shaking — cooling, dilution, and perceived sweetness."
+aliases:
+  - "/posts/2022/cocktails/"
+  - "/posts/2022/cocktails.jl/"
+  - "/posts/2022/2022-04-30-cocktails2/"
+freeze: true
+---
+
+This post is a [Pluto.jl](https://plutojl.org/) notebook exploring cocktail shaking with [ModelingToolkit.jl](https://github.com/SciML/ModelingToolkit.jl). It models the thermodynamics of shaking — how ice melts, dilutes, and cools a cocktail, and how that affects perceived sweetness.
+
+[View the interactive notebook](notebook.html){.btn .btn-primary}

@@ -1,2 +1,2 @@
-*.zip
-*.key
+/.quarto/
+**/*.quarto_ipynb

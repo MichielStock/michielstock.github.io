@@ -1,0 +1,64 @@
+---
+title: "Teaching"
+toc: true
+aliases:
+  - /teaching/
+---
+
+I strongly believe in the power of computation and toy systems to learn concepts.
+Students learn best by being able to toy around with concrete examples.
+
+## Current Courses
+
+### Differential Equations
+
+*2nd Ba Bioscience Engineering & 2nd Ba Biosciences — Lecturer since 2023*
+
+A foundational course on analytically and numerically solving ODEs, with an
+introduction to PDEs, series solutions, and the Laplace transform. Also
+taught in condensed form for the BSc Biosciences programme.
+
+### Modelling and Simulation
+
+*2nd Ba Bioscience Engineering — Lecturer since 2024*
+
+The main principles of modelling and simulation with differential equations
+and probability distributions. Topics include mass balances, SDEs, SSAs,
+Monte Carlo and Markov Chain Monte Carlo, Bayesian reasoning, optimization,
+calibration, sensitivity, uncertainty, and model selection.
+
+[Course website →](https://kermit-ugent.github.io/ModSim/)
+
+### Introduction to Modelling and Simulation
+
+*Ma Environmental Sanitation — Lecturer since 2024*
+
+An elementary introduction to modelling and simulation, based on Allen Downey's
+book *Modeling and Simulation in Python*.
+
+## Past Courses
+
+### Selected Topics in Mathematical Optimization
+
+*Ma Bioinformatics*
+
+An introduction to numerical algorithms for optimization, covering
+convex optimization, gradient descent, stochastic methods, and more.
+The course used Julia for all implementations.
+
+[Course materials →](https://michielstock.github.io/STMO/)
+
+## Workshops
+
+### Julia for Data Science (Doctoral School)
+
+Together with colleagues, I give an annual three-day Doctoral School
+course on the Julia programming language.
+
+[Course materials →](https://beramos.github.io/DS-Julia2925/)
+
+## Student Supervision
+
+I supervise MSc thesis students and PhD researchers. If you are interested
+in a thesis topic at the intersection of computational methods and biological
+systems, feel free to [reach out](mailto:michiel.stock@ugent.be).

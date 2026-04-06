@@ -1,0 +1,94 @@
+---
+title: "About"
+toc: true
+aliases:
+  - /CV/
+---
+
+## Who I Am
+
+I am an assistant professor at [Ghent University](https://www.ugent.be/),
+part of the Faculty of Bioscience Engineering. Together with Bernard De Baets,
+I co-lead the [KERMIT](https://kermit.ugent.be/) research unit, where I am
+responsible for the computational modelling research line.
+
+Machine intelligence and living systems fascinate me. In my research, I develop
+intelligent techniques to understand, predict, and control biological systems,
+large and small. My main toolbox involves a mix of machine learning,
+mathematical optimization, bioinformatics, and evolutionary computing. I use
+these methods to predict how plants, animals, microorganisms, and molecules
+interact with each other.
+
+Much of my work involves collaborating with people from different fields,
+translating biological problems into mathematical or computational ones.
+Every year, I try to engage students in projects and theses, doing cool
+things such as making a beer classifier or designing new proteins.
+
+Throughout all my activities, I value creativity and interdisciplinary
+collaboration to develop innovative ideas. I am also an avid reader and
+occasionally blog about books I find particularly interesting.
+
+## Education & Career
+
+::: {.timeline}
+
+::: {.timeline-item}
+[2024 – present]{.timeline-date}
+
+**Assistant Professor** — Ghent University\
+Applied dynamical systems, computational modelling for biological systems
+:::
+
+::: {.timeline-item}
+[2020 – 2024]{.timeline-date}
+
+**Doctoral Assistant** — Ghent University\
+Computational intelligence for synthetic biology
+:::
+
+::: {.timeline-item}
+[2020 – 2021]{.timeline-date}
+
+**Bioinformatics Consultant** (10%) — BioLizard\
+Machine learning consulting for biotech
+:::
+
+::: {.timeline-item}
+[2017 – 2020]{.timeline-date}
+
+**FWO Postdoctoral Researcher** — Ghent University\
+Machine learning methods for ecological networks
+:::
+
+::: {.timeline-item}
+[2012 – 2017]{.timeline-date}
+
+**PhD in BioScience Engineering** — Ghent University\
+Machine learning methods for pairwise learning
+:::
+
+::: {.timeline-item}
+[2010 – 2012]{.timeline-date}
+
+**MSc BioScience Engineering: Cell & Gene Biotechnology** — Ghent University\
+Major: Computational biology
+:::
+
+::: {.timeline-item}
+[2007 – 2010]{.timeline-date}
+
+**BSc BioScience Engineering** — Ghent University
+:::
+
+:::
+
+## Teaching
+
+See the [Teaching page](teaching.qmd) for my current courses and materials.
+
+## Publications
+
+See my full publication list on [Google Scholar](https://scholar.google.be/citations?user=qR_LXM8AAAAJ&hl=en)
+(~88 publications, ~2,800 citations).
+
+For key publications, see the [Research](research.qmd) page.

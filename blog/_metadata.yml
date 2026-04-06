@@ -1,0 +1,11 @@
+author: "Michiel Stock"
+date-format: "MMMM D, YYYY"
+citation: false
+toc: true
+toc-depth: 3
+code-fold: true
+code-tools: true
+fig-responsive: true
+execute:
+  freeze: auto
+  warning: false

@@ -1,0 +1,13 @@
+---
+title: "Walk on Spheres Algorithm"
+date: 2025-05-27
+categories: [julia, maths]
+description: "Solving Laplace's equation using the Walk on Spheres algorithm — a Monte Carlo method for PDEs."
+aliases:
+  - "/posts/2025/WoS/"
+freeze: true
+---
+
+This post is a [Pluto.jl](https://plutojl.org/) notebook implementing the Walk on Spheres algorithm, a Monte Carlo method for solving Laplace's equation without meshing.
+
+[View the interactive notebook](notebook.html){.btn .btn-primary}

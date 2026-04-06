@@ -1,0 +1,14 @@
+---
+title: "On betting optimally"
+date: 2022-12-05
+categories: [julia, maths]
+description: "Exploring ergodicity economics and optimal betting strategies through simulation."
+aliases:
+  - "/posts/2022/ergodicity/"
+  - "/posts/2022/ergodicity.jl/"
+freeze: true
+---
+
+This post is a [Pluto.jl](https://plutojl.org/) notebook on ergodicity economics — why maximizing expected value can ruin you, and how to bet optimally instead.
+
+[View the interactive notebook](notebook.html){.btn .btn-primary}
