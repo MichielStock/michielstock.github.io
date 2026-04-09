@@ -69,6 +69,8 @@ format:
     linestretch: 1.6
     include-after-body:
       text: '<script data-goatcounter="https://michielstock.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>'
+    include-in-header:
+      text: <meta name="google-site-verification" content="Bhv0IGic1cw_qPeXyTmEWagzl-TYw--0AYETBUTxy6o" />
 
 execute:
   freeze: auto
