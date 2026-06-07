@@ -10,7 +10,744 @@
 <atom:link href="https://michielstock.github.io/blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Blog by Michiel Stock on data science, mathematics, computing, and books.</description>
 <generator>quarto-1.9.36</generator>
-<lastBuildDate>Mon, 22 Dec 2025 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 07 Jun 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Condition Gaussian processes on nearly everything</title>
+  <dc:creator>Michiel Stock</dc:creator>
+  <link>https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>The Bayesian viewpoint is a highly instructive way to think about machine learning (and intelligence in general). A Gaussian process (GP) is perhaps one of the most elegant machine learning methods, providing a way to perform Bayesian inference over functions, and you can condition on how these functions should behave to obtain a posterior process. Powerful, it might be, but the mathematics works out nicely only in the linear/Gaussian regime, where the distributions are conjugate. For example, regression is easy, while classification (where the functions typically map to probabilities) is substantially harder, requiring more advanced methods such as the Laplace approximation, variational inference, or MCMC.</p>
+<p>I recently came across a nice paper by Moss et al.&nbsp;(2026) that shows how to condition a GP on nearly any event that can be encoded as a PDF. For example, you can constrain the functions to be positive, monotone, or convex, or to satisfy a differential equation. They call their framework FLOWGP, as it is based on stochastic flow models. Their conditioning framework includes a method for sampling from a prior GP and conditioning on both the data D (traditional linear-Gaussian constraints) and the nonlinear, non-Gaussian likelihoods C.</p>
+<p>Let us explore here how and whether this works. A notebook with the code can be found on <a href="https://pluto.land/n/rkxrmlcw">PlutoLand</a>.</p>
+</section>
+<section id="gaussian-process-crash-course" class="level2">
+<h2 class="anchored" data-anchor-id="gaussian-process-crash-course">Gaussian process crash course</h2>
+<p>A GP is rather simple: it is a stochastic process in which any finite set of point evaluations follows a multivariate normal (MVN) distribution. Practically, one can define a GP prior distribution by specifying a mean function <img src="https://latex.codecogs.com/png.latex?m(x)"><sup>1</sup> and a positive definite covariance or kernel function <img src="https://latex.codecogs.com/png.latex?k(x,x')">, which determines the correlation between the points (or the variance via <img src="https://latex.codecogs.com/png.latex?k(x,x)">).</p>
+<p>For example, we define a simple radial basis kernel for smooth, nonlinear functions.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">k</span>(x, y; γ<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.0</span>, degree<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, A<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">A*exp</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">-norm</span>(x <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.-</span> y)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span>degree<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span>γ<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span></code></pre></div></div>
+<p>These are evaluated on a range of points to build the covariance matrix.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1">K <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">k</span>(x, y, A<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>) for x <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> xsteps, y <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> xsteps] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e-10</span>I</span></code></pre></div></div>
+<pre><code>K
+201×201 Matrix{Float64}:
+ 1.0          0.997503     0.99005      …  2.72143e-43  1.0087e-43   3.72008e-44
+ 0.997503     1.0          0.997503        7.30573e-43  2.72143e-43  1.0087e-43
+ 0.99005      0.997503     1.0             1.95145e-42  7.30573e-43  2.72143e-43
+ 0.977751     0.99005      0.997503        5.18658e-42  1.95145e-42  7.30573e-43
+ 0.960789     0.977751     0.99005         1.37161e-41  5.18658e-42  1.95145e-42
+ 0.939413     0.960789     0.977751     …  3.60921e-41  1.37161e-41  5.18658e-42
+ 0.913931     0.939413     0.960789        9.44975e-41  3.60921e-41  1.37161e-41
+ ⋮                                      ⋱                            ⋮
+ 5.18658e-42  1.37161e-41  3.60921e-41  …  0.977751     0.960789     0.939413
+ 1.95145e-42  5.18658e-42  1.37161e-41     0.99005      0.977751     0.960789
+ 7.30573e-43  1.95145e-42  5.18658e-42     0.997503     0.99005      0.977751
+ 2.72143e-43  7.30573e-43  1.95145e-42     1.0          0.997503     0.99005
+ 1.0087e-43   2.72143e-43  7.30573e-43     0.997503     1.0          0.997503
+ 3.72008e-44  1.0087e-43   2.72143e-43  …  0.99005      0.997503     1.0</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/cov_prior.svg" class="img-fluid figure-img"></p>
+<figcaption>“Covariance matrix prior GP.</figcaption>
+</figure>
+</div>
+<p>This suffices for defining a GP, from which we can easily sample from the prior distribution.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/samples_prior.svg" class="img-fluid figure-img"></p>
+<figcaption>Samples from the prior GP process.</figcaption>
+</figure>
+</div>
+<p>Now, suppose we have some data, likely with some noise.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/target.svg" class="img-fluid figure-img"></p>
+<figcaption>Noisy data points from an unknown target distribution.</figcaption>
+</figure>
+</div>
+<p>Can we condition the random functions to pass through this data? This can be done by using Bayes’ rule for MVN:</p>
+<p>Prior <code>x ∼ N(μ, Σ)</code>, observation <code>y = Ax + ε</code>, <code>ε ∼ N(0, Γ)</code>.</p>
+<p><strong>Posterior</strong> <code>x | y ∼ N(μ_post, Σ_post)</code>:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%5Cmu_%7B%5Ctext%7Bpost%7D%7D%20=%20%5Cmu%20+%20%5CSigma%20A%5E%5Ctop(A%5CSigma%20A%5E%5Ctop%20+%20%5CGamma)%5E%7B-1%7D(y%20-%20A%5Cmu)"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%5CSigma_%7B%5Ctext%7Bpost%7D%7D%20=%20%5CSigma%20-%20%5CSigma%20A%5E%5Ctop(A%5CSigma%20A%5E%5Ctop%20+%20%5CGamma)%5E%7B-1%7D%20A%5CSigma"></p>
+<p><strong>Marginal of <code>y</code></strong> (useful for likelihood):</p>
+<p><img src="https://latex.codecogs.com/png.latex?y%20%5Csim%20N(A%5Cmu,%5C;%20A%5CSigma%20A%5E%5Ctop%20+%20%5CGamma)"></p>
+<p>So, using the matrix <img src="https://latex.codecogs.com/png.latex?A">, we can condition on (noisy) observations, or linear constraints in general. In practice for the example functions, we obtain.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/sample_posterior.svg" class="img-fluid figure-img"></p>
+<figcaption>Samples from the posterior.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/cov_posterior.svg" class="img-fluid figure-img"></p>
+<figcaption>Updated posterior covarance matrix.</figcaption>
+</figure>
+</div>
+<p>This all works well and is easy to implement. It scales well up to thousands of data points or linear constraints in general. Up to now, this has all been textbook. We summarize this (in 2D) in the figures below.</p>
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/GP_overview.svg" class="img-fluid"></p>
+<p>Because GPs are basically MVN distributions and the normal distribution is conjugate, conditioning on a Gaussian likelihood keeps the GP Gaussian, making the mathematics tractable.</p>
+<p>The paper discusses how to incorporate additional constraints, which are encoded as non-Gaussian PDFs. For example, if we want to condition the function <img src="https://latex.codecogs.com/png.latex?f"> to be positive, we can use a distribution that assigns no probability density to any point where any of the elements are negative, as shown below.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/constraints.svg" class="img-fluid figure-img"></p>
+<figcaption>Incorporating constraints.</figcaption>
+</figure>
+</div>
+<p>Traditionally, such extensions were solved by approximations. Either one approximates the problem using a local (Laplace approximation) or global (variational inference) approximation, or one uses Markov chain Monte Carlo to sample from intractable distributions. The paper here provides a new point of view to do this: diffusion.</p>
+</section>
+<section id="gaussian-processes-as-diffusion-models" class="level2">
+<h2 class="anchored" data-anchor-id="gaussian-processes-as-diffusion-models">Gaussian processes as diffusion models</h2>
+<p>In the paper, the authors frame a GP sample as a <a href="https://en.wikipedia.org/wiki/Diffusion_model">diffusion model</a>. The forward process assumes a sample <img src="https://latex.codecogs.com/png.latex?%7Bf%7D_0"> and keeps adding noise to it to obtain <img src="https://latex.codecogs.com/png.latex?%7Bf%7D_1%5Csim%20N(0,%20I)">. Diffusion models learn the inverse map, where one starts from a noise sample <img src="https://latex.codecogs.com/png.latex?%5Cmathbf%7Bz%7D%5Csim%20N(0,%20I)"> and one adds model-guided noise to obtain a sample of the target distribution (e.g., an image of an <a href="https://www.technologyreview.com/2021/01/05/1015754/avocado-armchair-future-ai-openai-deep-learning-nlp-gpt3-computer-vision-common-sense/">avocado armchair</a>).</p>
+<p>For Gaussian processes, the denoising process can be seen as simulating a stochastic differential equation, which can be generated by numerically integrating the following ODE, departing from a random sample:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%5Cfrac%7Bdf_t%7D%7Bdt%7D%20=%20-%5Ctfrac%7B1%7D%7B2%7D%5Cbeta(t)%5Cbig(f_t%20+%20s(f_t,t)%5Cbig)"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/guidance_sampling.svg" class="img-fluid figure-img"></p>
+<figcaption>Example of guidance sampling from a sample <img src="https://latex.codecogs.com/png.latex?z"> from N(0,I) to, here, a different MVN distribution.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/gp_diffusion.svg" class="img-fluid figure-img"></p>
+<figcaption>Diffusion from z to a sample of the GP posterior.</figcaption>
+</figure>
+</div>
+<p>Here, <img src="https://latex.codecogs.com/png.latex?%5Cbeta(t)"> is related to the process of how noise is added. For a vanilla GP, the guidance function <img src="https://latex.codecogs.com/png.latex?s(f_t,t)"> is fully determined by the GP. One can actually analytically solve the ODE. Things become more interesting when trying to guide with a non-Gaussian PDF <img src="https://latex.codecogs.com/png.latex?p(C%5Cmid%20%7Bf%7D)">, for which the guide is the gradient of the log-likelihood:</p>
+<p><img src="https://latex.codecogs.com/png.latex?s(f_t,t)%20=%20%5Cnabla_%7Bf_t%7D%5Clog%20p(C%5Cmid%20f_t,%20D)%5C,."></p>
+<p>Two tricks the authors develop to make this work:</p>
+<ul>
+<li>This gradient is, in general, not possible to evaluate, as we need to condition also on D. To this end, the authors take some Monte Carlo estimates (five suffice, but it works with even a single one) of the GP and create a self-normalised importance estimator.</li>
+<li>Using diffusion for <img src="https://latex.codecogs.com/png.latex?p(D%5Cmid%20f_0)"> and <img src="https://latex.codecogs.com/png.latex?p(C%5Cmid%20f_0)"> makes the problem stiff. Before denoising, the authors whiten the sample, i.e., remove the GP posterior signal. The diffusion is done in whitened space, and at the end, they transform back. This greatly improves the structure of the denoising problem, making it rather insensitive to the specific hyperparameter settings (which I could confirm experimentally)!</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/GPFLOW_tricks.svg" class="img-fluid figure-img"></p>
+<figcaption>The guidance sampling is done in the whitened space, meaning that the GP posterior is essentially transformed away.</figcaption>
+</figure>
+</div>
+<p>The full code for a basic implementation is given below</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb4-2"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    sample_conditional(m, K, log_p_C; kwargs)</span></span>
+<span id="cb4-3"></span>
+<span id="cb4-4"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">Conditions a sample of a GP with mean `m` and covariance `K`</span></span>
+<span id="cb4-5"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">according to log-likelihood constraint `log_p_C`.</span></span>
+<span id="cb4-6"></span>
+<span id="cb4-7"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb4-8"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sample_conditional</span>(m, K, log_p_C;</span>
+<span id="cb4-9">            S<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>,                 <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># number of Monte Carlo samples for gradient</span></span>
+<span id="cb4-10">            n_euler<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>,         <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># number of Euler steps</span></span>
+<span id="cb4-11">            jitter<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e-10</span>,        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># jitter for Cholesky decomposition</span></span>
+<span id="cb4-12">            v_max<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>)           <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># vmax for gradient clipping</span></span>
+<span id="cb4-13">    n <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(m)</span>
+<span id="cb4-14">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># random perturbations</span></span>
+<span id="cb4-15">    Z <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">randn</span>(n, S)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># share always the same noise for each step</span></span>
+<span id="cb4-16">    f̂ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">randn</span>(n)</span>
+<span id="cb4-17">    F_samples <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">similar</span>(Z)</span>
+<span id="cb4-18">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># stuff for whitening</span></span>
+<span id="cb4-19">    C <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cholesky</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">Symmetric</span>(K <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> jitter<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>I))</span>
+<span id="cb4-20">    L <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> C.L </span>
+<span id="cb4-21">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># define log_p_C and its gradient on whitened vector </span></span>
+<span id="cb4-22">    log_p_C_whitened <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> f̂ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log_p_C</span>(L <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> f̂ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.+</span> m)</span>
+<span id="cb4-23">    ∇log_p_C_whitened <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> f̂ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> ForwardDiff.<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">gradient</span>(log_p_C_whitened, f̂)</span>
+<span id="cb4-24">    s <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">zeros</span>(n)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># gradient for conditioning</span></span>
+<span id="cb4-25">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># euler steps</span></span>
+<span id="cb4-26">    tsteps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">range</span>(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, length<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>n_euler)</span>
+<span id="cb4-27">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> t <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> tsteps</span>
+<span id="cb4-28">        αₜ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">α</span>(t)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># drift coefficient</span></span>
+<span id="cb4-29">        σₜ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">√</span>(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> αₜ<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb4-30">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># sample in whitened space</span></span>
+<span id="cb4-31">        F_samples <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.=</span> αₜ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.*</span> f̂ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.+</span> σₜ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.*</span> Z</span>
+<span id="cb4-32">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># compute gradient using MC</span></span>
+<span id="cb4-33">        ℓ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log_p_C_whitened</span>(F_samples[<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>,i]) for i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>S]</span>
+<span id="cb4-34">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># turn in weights (log-sum-exp trick)</span></span>
+<span id="cb4-35">        w <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">exp</span>.(ℓ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">logsumexp</span>(ℓ))</span>
+<span id="cb4-36">        s <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.0</span></span>
+<span id="cb4-37">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> (i, wᵢ) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">enumerate</span>(w)</span>
+<span id="cb4-38">            s <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.+=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">∇log_p_C_whitened</span>(F_samples[<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>,i]) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> w[i]</span>
+<span id="cb4-39">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">end</span></span>
+<span id="cb4-40">        s <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.*=</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">β</span>(t) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> αₜ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span>
+<span id="cb4-41">        <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">smooth_clip!</span>(s; v_max)   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># soft clip the gradients</span></span>
+<span id="cb4-42">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># update</span></span>
+<span id="cb4-43">        f̂ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.+=</span> s <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">step</span>(tsteps)</span>
+<span id="cb4-44">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">end</span></span>
+<span id="cb4-45">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># unwhiten</span></span>
+<span id="cb4-46">    f̂ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.=</span> L <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> f̂ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.+</span> m</span>
+<span id="cb4-47">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> f̂   </span>
+<span id="cb4-48"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">end</span></span></code></pre></div></div>
+</section>
+<section id="conditioning-in-practice" class="level2">
+<h2 class="anchored" data-anchor-id="conditioning-in-practice">Conditioning in practice</h2>
+<p>Let us try some examples. Suppose we want to condition our posterior to be positive. This can be realised by picking a log-PDF that returns very low values when elements of <img src="https://latex.codecogs.com/png.latex?f"> are negative:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log_p_C</span>(f₀; ν<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e-3</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sum</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">logerfc</span>.(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">-</span>(f₀ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">./</span> ν) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">./</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)))</span></code></pre></div></div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/postive_constraint.svg" class="img-fluid figure-img"></p>
+<figcaption>Encoding a positive constraint.</figcaption>
+</figure>
+</div>
+<p>Using the wonder of automatic differentiation, this is the only thing we need to specify! So this works:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1">f̂ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sample_conditional</span>(m_cond_y, K_cond_y, log_p_C)</span></code></pre></div></div>
+<p>Taking a sample takes a bit less than 500 ms on my machine (my code has great potential for optimisation).</p>
+<pre><code>BenchmarkTools.Trial: 20 samples with 1 evaluation per sample.
+ Range (min … max):  239.502 ms … 348.179 ms  ┊ GC (min … max): 6.19% … 31.50%
+ Time  (median):     245.681 ms               ┊ GC (median):    6.65%
+ Time  (mean ± σ):   260.413 ms ±  28.139 ms  ┊ GC (mean ± σ):  9.11% ±  6.85%
+
+  █▄▁▁            ▁       ▁                                      
+  ████▁▁▆▁▁▁▁▁▁▆▆▁█▁▁▁▁▁▁▁█▁▁▁▁▁▁▁▁▁▁▁▁▁▁▆▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▆ ▁
+  240 ms           Histogram: frequency by time          348 ms &lt;
+
+ Memory estimate: 1019.66 MiB, allocs estimate: 141725.</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/posterior_constraint_samples.svg" class="img-fluid figure-img"></p>
+<figcaption>Samples of the posterior distribution constrained to be positive.</figcaption>
+</figure>
+</div>
+<p>You see that these are very reasonable posteriors and all satisfy the constraints.</p>
+</section>
+<section id="simple-classification" class="level2">
+<h2 class="anchored" data-anchor-id="simple-classification">Simple classification</h2>
+<p>For this toy example, you can see that we can sample from the GP prior, where <img src="https://latex.codecogs.com/png.latex?f"> is a probit of the class probabilities. Such a Bayesian classifier is very useful, for example, in Bayesian optimisation with binary labels (e.g., designing proteins that are active or not), where one has to separate uncertainty between aleatoric (due to irreducible noise and fuzzy class boundaries) and epistemic (due to an incomplete model) uncertainty (Fauvel &amp; Chalk, 2021).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/clf_data.svg" class="img-fluid figure-img"></p>
+<figcaption>Simple binary classification data.</figcaption>
+</figure>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># cross-entropy on σ(f)</span></span>
+<span id="cb8-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log_C_clf</span>(f)</span>
+<span id="cb8-3">    σ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> fi <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> (<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">exp</span>(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>fi))</span>
+<span id="cb8-4">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sum</span>(ti ? <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">σ</span>(f[i])) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log</span>(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">-σ</span>(f[i])) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> (i, ti) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">zip</span>(Iclf, targetclf))</span>
+<span id="cb8-5"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">end</span></span></code></pre></div></div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/clf_post.svg" class="img-fluid figure-img"></p>
+<figcaption>Posterior GP samples for classification.</figcaption>
+</figure>
+</div>
+<p>For this toy example, you see that we can get samples from the GP prior were <img src="https://latex.codecogs.com/png.latex?f"> are probits of the class probabilities. Such a Bayesian classifier is very useful, for example, in Bayesian optimisation with binary labels (e.g., designing proteins that are active or not), where one has to separate uncertainty between aleatoric (due to irreducible noise and fuzzy class boundaries) and epistemic (due to an incomplete model) uncertainty (Fauvel &amp; Chalk, 2021).</p>
+</section>
+<section id="guiding-towards-other-properties" class="level2">
+<h2 class="anchored" data-anchor-id="guiding-towards-other-properties">Guiding towards other properties</h2>
+<p>Using the same logic, one can constain the functions to be monotoneously inceasing</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log_p_monotone</span>(f; ν<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e-3</span>)</span>
+<span id="cb9-2">    Δ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">diff</span>(f)                     <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># discrete derivative</span></span>
+<span id="cb9-3">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sum</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">logcdf</span>(STDNORMAL, Δ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">./</span> ν))</span>
+<span id="cb9-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">end</span></span></code></pre></div></div>
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/prior_samples_monotone.svg" class="img-fluid"></p>
+<p>convex</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log_p_convex</span>(f; ν<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e-3</span>)</span>
+<span id="cb10-2">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Second differences: f[i+1] - 2f[i] + f[i-1] ≥ 0 for convexity</span></span>
+<span id="cb10-3">    Δ² <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> f[<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">end</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.-</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.*</span> f[<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">end</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.+</span> f[<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">end</span>]</span>
+<span id="cb10-4">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sum</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">logerfc</span>.(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.-</span>Δ² <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">./</span> (ν <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))))</span>
+<span id="cb10-5"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">end</span></span></code></pre></div></div>
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/prior_samples_convex.svg" class="img-fluid"></p>
+<p>or a combination</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log_p_monotone_convex</span>(t) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log_p_convex</span>(t) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log_p_monotone</span>(t)</span></code></pre></div></div>
+<p><img src="https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/figures/prior_samples_convex_montone.svg" class="img-fluid"></p>
+</section>
+<section id="potential-and-conclusions" class="level2">
+<h2 class="anchored" data-anchor-id="potential-and-conclusions">Potential and conclusions</h2>
+<p>I enjoyed reading this paper and playing around with the ideas. The mathematical foundation is elegant and broad in scope, and it is surprisingly easy to get working in practice with very little tuning. My code could work for any constraint, thanks to autodiff, though it will need some speedup to scale to larger problems.</p>
+<p>This work greatly extends/simplifies Bayesian and probabilistic modelling using Gaussian processes, without resorting to specific tricks such as variational inference. Constraints, physical laws, mechanistic structure, i.e., anything you can write down as a scoring function <img src="https://latex.codecogs.com/png.latex?%5Clog%20p(C%20%5Cmid%20f)">. It composes multiplicatively without needing specific inference schemes. It allows for moving GP beyond the world of the Gaussians.</p>
+<p>What the authors briefly explore (and is almost certainly grounds for future research) is conditioning on LLM outputs, using them to encode inprecise or hard-to-quantify information. For example, it would be worthwhile in domains such as protein engineering with sparse experimental activity data and prior knowledge incorporated in foundation models. Here, a model such as ESMFold can serve as a prior for biological plausibility, which can be combined with experimental data in a Bayesian framework.</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<p>Moss, H., Astfalck, L., Cowperthwaite, T., Doumont, C., Willis, S., Hennig, P., Nemeth, C., Zammit-Mangion, A., 2026. Conditioning Gaussian Processes on Almost Anything. https://doi.org/10.48550/arXiv.2605.21041</p>
+<p>Fauvel, T., Chalk, M., 2021. Efficient exploration in binary and preferential Bayesian optimization. arXiv.</p>
+<hr>
+
+
+<!-- -->
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>The number of dimensions does not matter, not the exact nature of the space, but let us keep it 1D Euclidean for the sake of simplicity.↩︎</p></li>
+</ol>
+</section></div> ]]></description>
+  <category>maths</category>
+  <category>data science</category>
+  <category>computing</category>
+  <guid>https://michielstock.github.io/blog/posts/2026/2026-06-08-gaussian-processes-conditioning/</guid>
+  <pubDate>Sun, 07 Jun 2026 22:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Algorithmic Information Dynamics</title>
   <dc:creator>Michiel Stock</dc:creator>
@@ -640,329 +1377,6 @@
   <category>society</category>
   <guid>https://michielstock.github.io/blog/posts/2021/2021-11-24-democracy/</guid>
   <pubDate>Tue, 23 Nov 2021 23:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Newton fractal in Julia using Symbolics.jl</title>
-  <dc:creator>Michiel Stock</dc:creator>
-  <link>https://michielstock.github.io/blog/posts/2021/2021-10-17-fractal/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>The <a href="https://www.youtube.com/watch?v=-RdOwhmqP5s">most recent video</a> of 3blue1brown covered Newton fractals, a family of fractal curves that are obtained by applying Newton’s method to complex numbers. Since I am covering Newton’s method in my optimization course this week, it might be an entertaining illustration to play around with this topic.</p>
-<section id="newtons-method" class="level2">
-<h2 class="anchored" data-anchor-id="newtons-method">Newton’s method</h2>
-<p>Newton’s method is a <em>root-finding</em> algorithm. We can use it to find roots of a function <img src="https://latex.codecogs.com/png.latex?f">, i.e., inputs <img src="https://latex.codecogs.com/png.latex?x"> for which it holds that <img src="https://latex.codecogs.com/png.latex?f(x)=0">.</p>
-<p>When executing Newton’s method, we start with an initial <img src="https://latex.codecogs.com/png.latex?x"> and iteratively apply the following rule till convergence:</p>
-<p><img src="https://latex.codecogs.com/png.latex?%0Ax%20%5Cmapsto%20x%20-%20%5Cfrac%7Bf(x)%7D%7Bf'(x)%7D%5C,.%0A"></p>
-<p>This rule can be derived by taking the first-order Taylor approximation of <img src="https://latex.codecogs.com/png.latex?f(x+h)"> in <img src="https://latex.codecogs.com/png.latex?x"> and solving for the step <img src="https://latex.codecogs.com/png.latex?h"> that sets the approximation to zero.</p>
-<p>Let us apply this to a simple function!</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">f</span>(x) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> x<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">^</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>;</span></code></pre></div></div>
-<p>For most functions, we can compute its derivative, and hence Newton update, easily enough. However, let us be lazy and use this opportunity to use Julia’s new CAS <code>Symbolics.jl</code>. We write a function that takes a function as an input and computes the map above:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">using</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">Symbolics</span></span>
-<span id="cb2-2"></span>
-<span id="cb2-3"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">function</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">get_map</span>(f)</span>
-<span id="cb2-4">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># define variable</span></span>
-<span id="cb2-5">    <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">@variables</span> x</span>
-<span id="cb2-6">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># define derivative operator</span></span>
-<span id="cb2-7">    Dx <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">Differential</span>(x)</span>
-<span id="cb2-8">    map <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> x <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">f</span>(x) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">Dx</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">f</span>(x)) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> expand_derivatives</span>
-<span id="cb2-9">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># now we expand and compile to a Julia function</span></span>
-<span id="cb2-10">    update_expr <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">build_function</span>(map, x)</span>
-<span id="cb2-11">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">eval</span>(update_expr)</span>
-<span id="cb2-12"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">end</span></span>
-<span id="cb2-13"></span>
-<span id="cb2-14">update <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">get_map</span>(f)</span></code></pre></div></div>
-<p>Yes! We get a new function: the update map! Let us try it on a value <img src="https://latex.codecogs.com/png.latex?x=2"></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">update</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2.0</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># apply map once</span></span></code></pre></div></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">update</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">update</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2.0</span>))  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># apply map twice</span></span></code></pre></div></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">update</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">update</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">update</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2.0</span>)))  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># apply map thrice</span></span></code></pre></div></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">update</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">update</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">update</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">update</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2.0</span>))))  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># apply map four times</span></span></code></pre></div></div>
-<p>We see that after a couple of steps, the Newton method converges to the root <img src="https://latex.codecogs.com/png.latex?x=1">.</p>
-<p>For our convenience, let us define a function that applies this map <img src="https://latex.codecogs.com/png.latex?n"> times.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">function</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">applyiteratively</span>(x, update; n<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">100</span>)</span>
-<span id="cb7-2">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span>n</span>
-<span id="cb7-3">        x <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">update</span>(x)</span>
-<span id="cb7-4">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">end</span></span>
-<span id="cb7-5">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> x</span>
-<span id="cb7-6"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">end</span></span>
-<span id="cb7-7"></span>
-<span id="cb7-8"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">applyiteratively</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2.0</span>, update)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># apply 100 times</span></span></code></pre></div></div>
-</section>
-<section id="complex-roots" class="level2">
-<h2 class="anchored" data-anchor-id="complex-roots">Complex roots</h2>
-<p>Astute readers might have noticed that <img src="https://latex.codecogs.com/png.latex?x%5E3-1"> has three roots: one real (<img src="https://latex.codecogs.com/png.latex?x=1">) and two complex ones (<img src="https://latex.codecogs.com/png.latex?x=-1/2+%5Csqrt%7B3%7Di/2"> and <img src="https://latex.codecogs.com/png.latex?x=-1/2-%5Csqrt%7B3%7Di/2">). Would our method also work with complex inputs?</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">applyiteratively</span>(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2.0</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2.0im</span>, update)</span></code></pre></div></div>
-<p>We see that this converges to a different (complex) root! Other values might converge to different roots!</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">applyiteratively</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2.0</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2.0im</span>, update)</span></code></pre></div></div>
-</section>
-<section id="the-newton-fractal" class="level2">
-<h2 class="anchored" data-anchor-id="the-newton-fractal">The Newton fractal</h2>
-<p>Imagine that we try this process for many complex numbers in an interval. Depending on the initial starting input, we end up in a different root. By colouring the results according to the root we end up in, we obtain the <em>Newton fractal</em>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1">lower <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2im</span></span>
-<span id="cb10-2">upper <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2im</span></span>
-<span id="cb10-3"></span>
-<span id="cb10-4">step <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.5e-2</span></span>
-<span id="cb10-5"></span>
-<span id="cb10-6"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># generate a range of complex values</span></span>
-<span id="cb10-7">Z0 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [a<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span>b<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span><span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">im</span> for b <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">real</span>(lower)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span>step<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">real</span>(upper),</span>
-<span id="cb10-8">                    a <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">imag</span>(lower)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span>step<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">imag</span>(upper)]</span>
-<span id="cb10-9"></span>
-<span id="cb10-10"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># apply the update 100 times</span></span>
-<span id="cb10-11">Z100 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">applyiteratively</span>.(Z0, update);</span></code></pre></div></div>
-<p>This results in a large complex matrix. We might define a colourmap for complex numbers as done <a href="https://vqm.uni-graz.at/pages/colormap.html">here</a>, though plotting the angle of the complex number in polar coordinates suffices.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">using</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">Plots</span></span>
-<span id="cb11-2"></span>
-<span id="cb11-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">heatmap</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">angle</span>.(Z100), colorbar<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">false</span>, color<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=:</span>rainbow, ticks<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">false</span>)</span></code></pre></div></div>
-<p>Below are some other examples.</p>
-<p><img src="https://latex.codecogs.com/png.latex?%0Af(x)%20=%20x%5E8%20+%2015x%5E4%20-16%0A"></p>
-<p><img src="https://latex.codecogs.com/png.latex?%0Af(x)%20=%20%5Ccosh(x)%20-%201%0A"></p>
-
-
-<!-- -->
-
-</section>
-
- ]]></description>
-  <category>computing</category>
-  <category>maths</category>
-  <guid>https://michielstock.github.io/blog/posts/2021/2021-10-17-fractal/</guid>
-  <pubDate>Sat, 16 Oct 2021 22:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
