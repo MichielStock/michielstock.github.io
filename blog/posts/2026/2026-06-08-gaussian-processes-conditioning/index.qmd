@@ -48,7 +48,7 @@ K
  3.72008e-44  1.0087e-43   2.72143e-43  …  0.99005      0.997503     1.0
  ```
 
- !["Covariance matrix prior GP.](figures/cov_prior.svg)
+ ![Covariance matrix prior GP.](figures/cov_prior.svg)
 
 
 This suffices for defining a GP, from which we can easily sample from the prior distribution.
@@ -79,7 +79,7 @@ So, using the matrix $A$, we can condition on (noisy) observations, or linear co
 
 ![Samples from the posterior.](figures/sample_posterior.svg)
 
-![Updated posterior covarance matrix.](figures/cov_posterior.svg)
+![Updated posterior covariance matrix.](figures/cov_posterior.svg)
 
 This all works well and is easy to implement. It scales well up to thousands of data points or linear constraints in general. Up to now, this has all been textbook. We summarize this (in 2D) in the figures below. 
 
@@ -205,7 +205,7 @@ You see that these are very reasonable posteriors and all satisfy the constraint
 
 ## Simple classification
 
-For this toy example, you can see that we can sample from the GP prior, where $f$ is a probit of the class probabilities. Such a Bayesian classifier is very useful, for example, in Bayesian optimisation with binary labels (e.g., designing proteins that are active or not), where one has to separate uncertainty between aleatoric (due to irreducible noise and fuzzy class boundaries) and epistemic (due to an incomplete model) uncertainty (Fauvel & Chalk, 2021).
+Classification using Gaussian processes is a classical problem that normally requires some tinkering. For binary classification, the idea is to constrain the function $f$ such that, if we apply the logistic map $\sigma(f)$, one obtains class probabilities conditioned on the data via cross-entropy. This framework incorporates this naturally.
 
 ![Simple binary classification data.](figures/clf_data.svg)
 
@@ -219,12 +219,12 @@ end
 
 ![Posterior GP samples for classification.](figures/clf_post.svg)
 
-For this toy example, you see that we can get samples from the GP prior were $f$ are probits of the class probabilities. Such a Bayesian classifier is very useful, for example, in Bayesian optimisation with binary labels (e.g., designing proteins that are active or not), where one has to separate uncertainty between aleatoric (due to irreducible noise and fuzzy class boundaries) and epistemic (due to an incomplete model) uncertainty (Fauvel & Chalk, 2021).
+For this toy example, you see that we can get samples from the GP prior where $f$ are probits of the class probabilities. Such a Bayesian classifier is very useful, for example, in Bayesian optimisation with binary labels (e.g., designing proteins that are active or not), where one has to separate uncertainty between aleatoric (due to irreducible noise and fuzzy class boundaries) and epistemic (due to an incomplete model) uncertainty (Fauvel & Chalk, 2021).
 
 
 ## Guiding towards other properties
 
-Using the same logic, one can constain the functions to be monotoneously inceasing
+Using the same logic, one can constrain the functions to be monotonously increasing.
 
 ```julia
 function log_p_monotone(f; ν=1e-3)
@@ -259,9 +259,14 @@ log_p_monotone_convex(t) = log_p_convex(t) + log_p_monotone(t)
 
 I enjoyed reading this paper and playing around with the ideas. The mathematical foundation is elegant and broad in scope, and it is surprisingly easy to get working in practice with very little tuning. My code could work for any constraint, thanks to autodiff, though it will need some speedup to scale to larger problems.
 
-This work greatly extends/simplifies Bayesian and probabilistic modelling using Gaussian processes, without resorting to specific tricks such as variational inference. Constraints, physical laws, mechanistic structure, i.e., anything you can write down as a scoring function $\log p(C \mid f)$. It composes multiplicatively without needing specific inference schemes. It allows for moving GP beyond the world of the Gaussians.
+This work greatly extends and simplifies Bayesian and probabilistic modelling using Gaussian processes, without resorting to specific tricks such as variational inference. Constraints, physical laws, mechanistic structure, i.e., anything you can write down as a scoring function $\log p(C \mid f)$. It composes multiplicatively without needing specific inference schemes.
 
-What the authors briefly explore (and is almost certainly grounds for future research) is conditioning on LLM outputs, using them to encode inprecise or hard-to-quantify information. For example, it would be worthwhile in domains such as protein engineering with sparse experimental activity data and prior knowledge incorporated in foundation models. Here, a model such as ESMFold can serve as a prior for biological plausibility, which can be combined with experimental data in a Bayesian framework.
+What the authors briefly explore (and is almost certainly grounds for future research) is conditioning on LLM outputs, using them to encode imprecise or hard-to-quantify information. For example, it would be worthwhile in domains such as protein engineering with sparse experimental activity data and prior knowledge incorporated in foundation models. Here, a model such as ESMFold can serve as a prior for biological plausibility, which can be combined with experimental data in a Bayesian framework.
+
+It is also worth being realistic about what FLOWGP does *not* do. It samples function-space posteriors but does not jointly infer the parameters of the dynamics generating those functions. In the physics examples, the equation coefficients are assumed known, which is not what one usually means by "physics-informed ML". It also inherits the $O(m^3)$ scaling of exact GPs and offers no escape from this bottleneck at large discretisations. The theoretical guarantees are clean for log-concave likelihoods (classification, Poisson, convex constraints), but only worst-case bounds apply to non-log-concave cases such as nonlinear physics residuals or LLM-derived densities, where the method works empirically. And "condition on anything" is more precisely "condition on anything one can score": writing down a likelihood for a verbal description or a structural intuition is often itself the hard problem, and FLOWGP does not help with that step.
+
+FLOWGP is a meaningful addition to the GP toolkit rather than a replacement for the broader Bayesian inference machinery. The cases where it fits cleanly come up often enough that the implementation effort is genuinely worth it.
+
 
 ## References
 

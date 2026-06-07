@@ -480,7 +480,7 @@ window.Quarto = {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="figures/cov_prior.svg" class="img-fluid figure-img"></p>
-<figcaption>“Covariance matrix prior GP.</figcaption>
+<figcaption>Covariance matrix prior GP.</figcaption>
 </figure>
 </div>
 <p>This suffices for defining a GP, from which we can easily sample from the prior distribution.</p>
@@ -514,7 +514,7 @@ window.Quarto = {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="figures/cov_posterior.svg" class="img-fluid figure-img"></p>
-<figcaption>Updated posterior covarance matrix.</figcaption>
+<figcaption>Updated posterior covariance matrix.</figcaption>
 </figure>
 </div>
 <p>This all works well and is easy to implement. It scales well up to thousands of data points or linear constraints in general. Up to now, this has all been textbook. We summarize this (in 2D) in the figures below.</p>
@@ -642,7 +642,7 @@ window.Quarto = {
 </section>
 <section id="simple-classification" class="level2">
 <h2 class="anchored" data-anchor-id="simple-classification">Simple classification</h2>
-<p>For this toy example, you can see that we can sample from the GP prior, where <span class="math inline">\(f\)</span> is a probit of the class probabilities. Such a Bayesian classifier is very useful, for example, in Bayesian optimisation with binary labels (e.g., designing proteins that are active or not), where one has to separate uncertainty between aleatoric (due to irreducible noise and fuzzy class boundaries) and epistemic (due to an incomplete model) uncertainty (Fauvel &amp; Chalk, 2021).</p>
+<p>Classification using Gaussian processes is a classical problem that normally requires some tinkering. For binary classification, the idea is to constrain the function <span class="math inline">\(f\)</span> such that, if we apply the logistic map <span class="math inline">\(\sigma(f)\)</span>, one obtains class probabilities conditioned on the data via cross-entropy. This framework incorporates this naturally.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="figures/clf_data.svg" class="img-fluid figure-img"></p>
@@ -660,11 +660,11 @@ window.Quarto = {
 <figcaption>Posterior GP samples for classification.</figcaption>
 </figure>
 </div>
-<p>For this toy example, you see that we can get samples from the GP prior were <span class="math inline">\(f\)</span> are probits of the class probabilities. Such a Bayesian classifier is very useful, for example, in Bayesian optimisation with binary labels (e.g., designing proteins that are active or not), where one has to separate uncertainty between aleatoric (due to irreducible noise and fuzzy class boundaries) and epistemic (due to an incomplete model) uncertainty (Fauvel &amp; Chalk, 2021).</p>
+<p>For this toy example, you see that we can get samples from the GP prior where <span class="math inline">\(f\)</span> are probits of the class probabilities. Such a Bayesian classifier is very useful, for example, in Bayesian optimisation with binary labels (e.g., designing proteins that are active or not), where one has to separate uncertainty between aleatoric (due to irreducible noise and fuzzy class boundaries) and epistemic (due to an incomplete model) uncertainty (Fauvel &amp; Chalk, 2021).</p>
 </section>
 <section id="guiding-towards-other-properties" class="level2">
 <h2 class="anchored" data-anchor-id="guiding-towards-other-properties">Guiding towards other properties</h2>
-<p>Using the same logic, one can constain the functions to be monotoneously inceasing</p>
+<p>Using the same logic, one can constrain the functions to be monotonously increasing.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">log_p_monotone</span>(f; ν<span class="op">=</span><span class="fl">1e-3</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    Δ <span class="op">=</span> <span class="fu">diff</span>(f)                     <span class="co"># discrete derivative</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">sum</span>(<span class="fu">logcdf</span>(STDNORMAL, Δ <span class="op">./</span> ν))</span>
@@ -684,8 +684,10 @@ window.Quarto = {
 <section id="potential-and-conclusions" class="level2">
 <h2 class="anchored" data-anchor-id="potential-and-conclusions">Potential and conclusions</h2>
 <p>I enjoyed reading this paper and playing around with the ideas. The mathematical foundation is elegant and broad in scope, and it is surprisingly easy to get working in practice with very little tuning. My code could work for any constraint, thanks to autodiff, though it will need some speedup to scale to larger problems.</p>
-<p>This work greatly extends/simplifies Bayesian and probabilistic modelling using Gaussian processes, without resorting to specific tricks such as variational inference. Constraints, physical laws, mechanistic structure, i.e., anything you can write down as a scoring function <span class="math inline">\(\log p(C \mid f)\)</span>. It composes multiplicatively without needing specific inference schemes. It allows for moving GP beyond the world of the Gaussians.</p>
-<p>What the authors briefly explore (and is almost certainly grounds for future research) is conditioning on LLM outputs, using them to encode inprecise or hard-to-quantify information. For example, it would be worthwhile in domains such as protein engineering with sparse experimental activity data and prior knowledge incorporated in foundation models. Here, a model such as ESMFold can serve as a prior for biological plausibility, which can be combined with experimental data in a Bayesian framework.</p>
+<p>This work greatly extends and simplifies Bayesian and probabilistic modelling using Gaussian processes, without resorting to specific tricks such as variational inference. Constraints, physical laws, mechanistic structure, i.e., anything you can write down as a scoring function <span class="math inline">\(\log p(C \mid f)\)</span>. It composes multiplicatively without needing specific inference schemes.</p>
+<p>What the authors briefly explore (and is almost certainly grounds for future research) is conditioning on LLM outputs, using them to encode imprecise or hard-to-quantify information. For example, it would be worthwhile in domains such as protein engineering with sparse experimental activity data and prior knowledge incorporated in foundation models. Here, a model such as ESMFold can serve as a prior for biological plausibility, which can be combined with experimental data in a Bayesian framework.</p>
+<p>It is also worth being realistic about what FLOWGP does <em>not</em> do. It samples function-space posteriors but does not jointly infer the parameters of the dynamics generating those functions. In the physics examples, the equation coefficients are assumed known, which is not what one usually means by “physics-informed ML”. It also inherits the <span class="math inline">\(O(m^3)\)</span> scaling of exact GPs and offers no escape from this bottleneck at large discretisations. The theoretical guarantees are clean for log-concave likelihoods (classification, Poisson, convex constraints), but only worst-case bounds apply to non-log-concave cases such as nonlinear physics residuals or LLM-derived densities, where the method works empirically. And “condition on anything” is more precisely “condition on anything one can score”: writing down a likelihood for a verbal description or a structural intuition is often itself the hard problem, and FLOWGP does not help with that step.</p>
+<p>FLOWGP is a meaningful addition to the GP toolkit rather than a replacement for the broader Bayesian inference machinery. The cases where it fits cleanly come up often enough that the implementation effort is genuinely worth it.</p>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
@@ -1219,7 +1221,7 @@ window.Quarto = {
 <span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a><span class="in"> 3.72008e-44  1.0087e-43   2.72143e-43  …  0.99005      0.997503     1.0</span></span>
 <span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a><span class="in"> ```</span></span>
 <span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a> <span class="al">!["Covariance matrix prior GP.](figures/cov_prior.svg)</span></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a> <span class="al">![Covariance matrix prior GP.](figures/cov_prior.svg)</span></span>
 <span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>This suffices for defining a GP, from which we can easily sample from the prior distribution.</span>
@@ -1250,7 +1252,7 @@ window.Quarto = {
 <span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a><span class="al">![Samples from the posterior.](figures/sample_posterior.svg)</span></span>
 <span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a><span class="al">![Updated posterior covarance matrix.](figures/cov_posterior.svg)</span></span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a><span class="al">![Updated posterior covariance matrix.](figures/cov_posterior.svg)</span></span>
 <span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a>This all works well and is easy to implement. It scales well up to thousands of data points or linear constraints in general. Up to now, this has all been textbook. We summarize this (in 2D) in the figures below. </span>
 <span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a></span>
@@ -1376,7 +1378,7 @@ window.Quarto = {
 <span id="cb12-205"><a href="#cb12-205" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-206"><a href="#cb12-206" aria-hidden="true" tabindex="-1"></a><span class="fu">## Simple classification</span></span>
 <span id="cb12-207"><a href="#cb12-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-208"><a href="#cb12-208" aria-hidden="true" tabindex="-1"></a>For this toy example, you can see that we can sample from the GP prior, where $f$ is a probit of the class probabilities. Such a Bayesian classifier is very useful, for example, in Bayesian optimisation with binary labels (e.g., designing proteins that are active or not), where one has to separate uncertainty between aleatoric (due to irreducible noise and fuzzy class boundaries) and epistemic (due to an incomplete model) uncertainty (Fauvel &amp; Chalk, 2021).</span>
+<span id="cb12-208"><a href="#cb12-208" aria-hidden="true" tabindex="-1"></a>Classification using Gaussian processes is a classical problem that normally requires some tinkering. For binary classification, the idea is to constrain the function $f$ such that, if we apply the logistic map $\sigma(f)$, one obtains class probabilities conditioned on the data via cross-entropy. This framework incorporates this naturally.</span>
 <span id="cb12-209"><a href="#cb12-209" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-210"><a href="#cb12-210" aria-hidden="true" tabindex="-1"></a><span class="al">![Simple binary classification data.](figures/clf_data.svg)</span></span>
 <span id="cb12-211"><a href="#cb12-211" aria-hidden="true" tabindex="-1"></a></span>
@@ -1390,12 +1392,12 @@ window.Quarto = {
 <span id="cb12-219"><a href="#cb12-219" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-220"><a href="#cb12-220" aria-hidden="true" tabindex="-1"></a><span class="al">![Posterior GP samples for classification.](figures/clf_post.svg)</span></span>
 <span id="cb12-221"><a href="#cb12-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-222"><a href="#cb12-222" aria-hidden="true" tabindex="-1"></a>For this toy example, you see that we can get samples from the GP prior were $f$ are probits of the class probabilities. Such a Bayesian classifier is very useful, for example, in Bayesian optimisation with binary labels (e.g., designing proteins that are active or not), where one has to separate uncertainty between aleatoric (due to irreducible noise and fuzzy class boundaries) and epistemic (due to an incomplete model) uncertainty (Fauvel &amp; Chalk, 2021).</span>
+<span id="cb12-222"><a href="#cb12-222" aria-hidden="true" tabindex="-1"></a>For this toy example, you see that we can get samples from the GP prior where $f$ are probits of the class probabilities. Such a Bayesian classifier is very useful, for example, in Bayesian optimisation with binary labels (e.g., designing proteins that are active or not), where one has to separate uncertainty between aleatoric (due to irreducible noise and fuzzy class boundaries) and epistemic (due to an incomplete model) uncertainty (Fauvel &amp; Chalk, 2021).</span>
 <span id="cb12-223"><a href="#cb12-223" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-224"><a href="#cb12-224" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-225"><a href="#cb12-225" aria-hidden="true" tabindex="-1"></a><span class="fu">## Guiding towards other properties</span></span>
 <span id="cb12-226"><a href="#cb12-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-227"><a href="#cb12-227" aria-hidden="true" tabindex="-1"></a>Using the same logic, one can constain the functions to be monotoneously inceasing</span>
+<span id="cb12-227"><a href="#cb12-227" aria-hidden="true" tabindex="-1"></a>Using the same logic, one can constrain the functions to be monotonously increasing.</span>
 <span id="cb12-228"><a href="#cb12-228" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-229"><a href="#cb12-229" aria-hidden="true" tabindex="-1"></a><span class="in">```julia</span></span>
 <span id="cb12-230"><a href="#cb12-230" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">log_p_monotone</span>(f; ν<span class="op">=</span><span class="fl">1e-3</span>)</span>
@@ -1430,20 +1432,25 @@ window.Quarto = {
 <span id="cb12-259"><a href="#cb12-259" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-260"><a href="#cb12-260" aria-hidden="true" tabindex="-1"></a>I enjoyed reading this paper and playing around with the ideas. The mathematical foundation is elegant and broad in scope, and it is surprisingly easy to get working in practice with very little tuning. My code could work for any constraint, thanks to autodiff, though it will need some speedup to scale to larger problems.</span>
 <span id="cb12-261"><a href="#cb12-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-262"><a href="#cb12-262" aria-hidden="true" tabindex="-1"></a>This work greatly extends/simplifies Bayesian and probabilistic modelling using Gaussian processes, without resorting to specific tricks such as variational inference. Constraints, physical laws, mechanistic structure, i.e., anything you can write down as a scoring function $\log p(C \mid f)$. It composes multiplicatively without needing specific inference schemes. It allows for moving GP beyond the world of the Gaussians.</span>
+<span id="cb12-262"><a href="#cb12-262" aria-hidden="true" tabindex="-1"></a>This work greatly extends and simplifies Bayesian and probabilistic modelling using Gaussian processes, without resorting to specific tricks such as variational inference. Constraints, physical laws, mechanistic structure, i.e., anything you can write down as a scoring function $\log p(C \mid f)$. It composes multiplicatively without needing specific inference schemes.</span>
 <span id="cb12-263"><a href="#cb12-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-264"><a href="#cb12-264" aria-hidden="true" tabindex="-1"></a>What the authors briefly explore (and is almost certainly grounds for future research) is conditioning on LLM outputs, using them to encode inprecise or hard-to-quantify information. For example, it would be worthwhile in domains such as protein engineering with sparse experimental activity data and prior knowledge incorporated in foundation models. Here, a model such as ESMFold can serve as a prior for biological plausibility, which can be combined with experimental data in a Bayesian framework.</span>
+<span id="cb12-264"><a href="#cb12-264" aria-hidden="true" tabindex="-1"></a>What the authors briefly explore (and is almost certainly grounds for future research) is conditioning on LLM outputs, using them to encode imprecise or hard-to-quantify information. For example, it would be worthwhile in domains such as protein engineering with sparse experimental activity data and prior knowledge incorporated in foundation models. Here, a model such as ESMFold can serve as a prior for biological plausibility, which can be combined with experimental data in a Bayesian framework.</span>
 <span id="cb12-265"><a href="#cb12-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-266"><a href="#cb12-266" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
+<span id="cb12-266"><a href="#cb12-266" aria-hidden="true" tabindex="-1"></a>It is also worth being realistic about what FLOWGP does *not* do. It samples function-space posteriors but does not jointly infer the parameters of the dynamics generating those functions. In the physics examples, the equation coefficients are assumed known, which is not what one usually means by "physics-informed ML". It also inherits the $O(m^3)$ scaling of exact GPs and offers no escape from this bottleneck at large discretisations. The theoretical guarantees are clean for log-concave likelihoods (classification, Poisson, convex constraints), but only worst-case bounds apply to non-log-concave cases such as nonlinear physics residuals or LLM-derived densities, where the method works empirically. And "condition on anything" is more precisely "condition on anything one can score": writing down a likelihood for a verbal description or a structural intuition is often itself the hard problem, and FLOWGP does not help with that step.</span>
 <span id="cb12-267"><a href="#cb12-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-268"><a href="#cb12-268" aria-hidden="true" tabindex="-1"></a>Moss, H., Astfalck, L., Cowperthwaite, T., Doumont, C., Willis, S., Hennig, P., Nemeth, C., Zammit-Mangion, A., 2026. Conditioning Gaussian Processes on Almost Anything. https://doi.org/10.48550/arXiv.2605.21041</span>
+<span id="cb12-268"><a href="#cb12-268" aria-hidden="true" tabindex="-1"></a>FLOWGP is a meaningful addition to the GP toolkit rather than a replacement for the broader Bayesian inference machinery. The cases where it fits cleanly come up often enough that the implementation effort is genuinely worth it.</span>
 <span id="cb12-269"><a href="#cb12-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-270"><a href="#cb12-270" aria-hidden="true" tabindex="-1"></a>Fauvel, T., Chalk, M., 2021. Efficient exploration in binary and preferential Bayesian optimization. arXiv.</span>
-<span id="cb12-271"><a href="#cb12-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-270"><a href="#cb12-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-271"><a href="#cb12-271" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
 <span id="cb12-272"><a href="#cb12-272" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-273"><a href="#cb12-273" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb12-273"><a href="#cb12-273" aria-hidden="true" tabindex="-1"></a>Moss, H., Astfalck, L., Cowperthwaite, T., Doumont, C., Willis, S., Hennig, P., Nemeth, C., Zammit-Mangion, A., 2026. Conditioning Gaussian Processes on Almost Anything. https://doi.org/10.48550/arXiv.2605.21041</span>
 <span id="cb12-274"><a href="#cb12-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-275"><a href="#cb12-275" aria-hidden="true" tabindex="-1"></a><span class="ot">[^1]: </span>The number of dimensions does not matter, not the exact nature of the space, but let us keep it 1D Euclidean for the sake of simplicity.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb12-275"><a href="#cb12-275" aria-hidden="true" tabindex="-1"></a>Fauvel, T., Chalk, M., 2021. Efficient exploration in binary and preferential Bayesian optimization. arXiv.</span>
+<span id="cb12-276"><a href="#cb12-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-277"><a href="#cb12-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-278"><a href="#cb12-278" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb12-279"><a href="#cb12-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-280"><a href="#cb12-280" aria-hidden="true" tabindex="-1"></a><span class="ot">[^1]: </span>The number of dimensions does not matter, not the exact nature of the space, but let us keep it 1D Euclidean for the sake of simplicity.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
